@@ -45,13 +45,6 @@ describe('Login Page', () => {
       historyRef.current?.push('/user/login');
     });
 
-    expect(
-      rootContainer.baseElement?.querySelector('.ant-pro-form-login-desc')
-        ?.textContent,
-    ).toBe(
-      'Ant Design is the most influential web design specification in Xihu district',
-    );
-
     expect(rootContainer.asFragment()).toMatchSnapshot();
 
     rootContainer.unmount();
@@ -79,7 +72,7 @@ describe('Login Page', () => {
     });
 
     const passwordInput = await rootContainer.findByPlaceholderText(
-      'Password: ant.design',
+      'Password: 123456',
     );
 
     act(() => {

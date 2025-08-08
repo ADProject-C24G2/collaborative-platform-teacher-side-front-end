@@ -162,8 +162,7 @@ const Login: React.FC = () => {
                   id: "pages.login.accountLogin.tab",
                   defaultMessage: "账户密码登录",
                 }),
-              },
-              // 手机号登录的 Tab 已被删除
+              }
             ]}
           />
 

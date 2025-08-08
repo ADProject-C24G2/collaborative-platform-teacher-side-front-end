@@ -88,10 +88,11 @@ export default defineConfig({
    * @name layout 插件
    * @doc https://umijs.org/docs/max/layout-menu
    */
-  title: "Ant Design Pro",
+  title: "Collaborative Practice Platform",
+  favicons: ['/favicon.ico'],
   layout: {
-    locale: true,
     ...defaultSettings,
+    locale: false,
   },
   /**
    * @name moment2dayjs 插件
@@ -109,7 +110,7 @@ export default defineConfig({
   locale: {
     // default en-US
     default: "en-US",
-    antd: false,
+    antd: true,
     // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: false,
   },
