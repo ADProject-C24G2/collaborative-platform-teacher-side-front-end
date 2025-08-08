@@ -1,6 +1,6 @@
-﻿import type { RequestOptions } from '@@/plugin-request/request';
-import type { RequestConfig } from '@umijs/max';
-import { message, notification } from 'antd';
+﻿import type { RequestOptions } from "@@/plugin-request/request";
+import type { RequestConfig } from "@umijs/max";
+import { message, notification } from "antd";
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -12,10 +12,10 @@ enum ErrorShowType {
 }
 // 与后端约定的响应数据格式
 interface ResponseStructure {
-  success: boolean;
+  code: any;
   data: any;
   errorCode?: number;
-  errorMessage?: string;
+  msg?: string;
   showType?: ErrorShowType;
 }
 
@@ -29,12 +29,12 @@ export const errorConfig: RequestConfig = {
   errorConfig: {
     // 错误抛出
     errorThrower: (res) => {
-      const { success, data, errorCode, errorMessage, showType } =
+      const { code, data, errorCode, msg, showType } =
         res as unknown as ResponseStructure;
-      if (!success) {
-        const error: any = new Error(errorMessage);
-        error.name = 'BizError';
-        error.info = { errorCode, errorMessage, showType, data };
+      if (!code) {
+        const error: any = new Error(msg);
+        error.name = "BizError";
+        error.info = { errorCode, msg, showType, data };
         throw error; // 抛出自制的错误
       }
     },
@@ -42,23 +42,23 @@ export const errorConfig: RequestConfig = {
     errorHandler: (error: any, opts: any) => {
       if (opts?.skipErrorHandler) throw error;
       // 我们的 errorThrower 抛出的错误。
-      if (error.name === 'BizError') {
+      if (error.name === "BizError") {
         const errorInfo: ResponseStructure | undefined = error.info;
         if (errorInfo) {
-          const { errorMessage, errorCode } = errorInfo;
+          const { msg, errorCode } = errorInfo;
           switch (errorInfo.showType) {
             case ErrorShowType.SILENT:
               // do nothing
               break;
             case ErrorShowType.WARN_MESSAGE:
-              message.warning(errorMessage);
+              message.warning(msg);
               break;
             case ErrorShowType.ERROR_MESSAGE:
-              message.error(errorMessage);
+              message.error(msg);
               break;
             case ErrorShowType.NOTIFICATION:
               notification.open({
-                description: errorMessage,
+                description: msg,
                 message: errorCode,
               });
               break;
@@ -66,7 +66,7 @@ export const errorConfig: RequestConfig = {
               // TODO: redirect
               break;
             default:
-              message.error(errorMessage);
+              message.error(msg);
           }
         }
       } else if (error.response) {
@@ -77,10 +77,10 @@ export const errorConfig: RequestConfig = {
         // 请求已经成功发起，但没有收到响应
         // \`error.request\` 在浏览器中是 XMLHttpRequest 的实例，
         // 而在node.js中是 http.ClientRequest 的实例
-        message.error('None response! Please retry.');
+        message.error("None response! Please retry.");
       } else {
         // 发送请求时出了点问题
-        message.error('Request error, please retry.');
+        message.error("Request error, please retry.");
       }
     },
   },
@@ -89,7 +89,7 @@ export const errorConfig: RequestConfig = {
   requestInterceptors: [
     (config: RequestOptions) => {
       // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token=123');
+      const url = config?.url?.concat("?token=123");
       return { ...config, url };
     },
   ],
@@ -100,8 +100,8 @@ export const errorConfig: RequestConfig = {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
 
-      if (data?.success === false) {
-        message.error('请求失败！');
+      if (data?.code === 0) {
+        message.error("Request failed!");
       }
       return response;
     },
