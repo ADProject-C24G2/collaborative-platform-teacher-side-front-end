@@ -109,7 +109,7 @@ export default defineConfig({
   locale: {
     // default en-US
     default: "en-US",
-    antd: true,
+    antd: false,
     // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: false,
   },

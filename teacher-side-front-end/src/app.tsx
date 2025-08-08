@@ -7,9 +7,7 @@ import React from "react";
 import {
   AvatarDropdown,
   AvatarName,
-  Footer,
-  Question,
-  SelectLang,
+  Footer
 } from "@/components";
 import { currentUser as queryCurrentUser } from "@/services/ant-design-pro/api";
 import defaultSettings from "../config/defaultSettings";
@@ -66,10 +64,6 @@ export const layout: RunTimeLayoutConfig = ({
   setInitialState,
 }) => {
   return {
-    actionsRender: () => [
-      <Question key="doc" />,
-      <SelectLang key="SelectLang" />,
-    ],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
       title: <AvatarName />,
@@ -108,14 +102,6 @@ export const layout: RunTimeLayoutConfig = ({
         width: "331px",
       },
     ],
-    links: isDevOrTest
-      ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-        ]
-      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
