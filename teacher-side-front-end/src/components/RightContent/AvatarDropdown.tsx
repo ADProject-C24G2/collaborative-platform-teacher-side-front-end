@@ -124,7 +124,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
     {
       key: "logout",
       icon: <LogoutOutlined />,
-      label: "退出登录",
+      label: "Logout",
     },
   ];
 
