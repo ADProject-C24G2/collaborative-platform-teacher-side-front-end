@@ -3,7 +3,6 @@
 import { join } from "node:path";
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./defaultSettings";
-import proxy from "./proxy";
 
 import routes from "./routes";
 
@@ -63,7 +62,7 @@ export default defineConfig({
    */
   proxy: {
     "/teacher": {
-      target: "http://localhost:8080",
+      target: process.env.REACT_APP_API_BASE || 'http://localhost:8080',
       changeOrigin: true,
     },
   },
