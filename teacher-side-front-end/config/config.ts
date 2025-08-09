@@ -172,6 +172,13 @@ export default defineConfig({
       projectName: "swagger",
     },
   ],
+  links: [
+    { rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' },
+
+    { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' },
+
+    { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+  ],
   // mock: {
   //   include: ["mock/**/*", "src/pages/**/_mock.ts"],
   // },
