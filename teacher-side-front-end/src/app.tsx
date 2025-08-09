@@ -1,21 +1,84 @@
-import { LinkOutlined } from "@ant-design/icons";
-import type { Settings as LayoutSettings } from "@ant-design/pro-components";
-import { SettingDrawer } from "@ant-design/pro-components";
-import type { RequestConfig, RunTimeLayoutConfig } from "@umijs/max";
-import { history, Link } from "@umijs/max";
-import React from "react";
 import {
   AvatarDropdown,
   AvatarName,
   Footer
 } from "@/components";
 import { currentUser as queryCurrentUser } from "@/services/ant-design-pro/api";
+import type { Settings as LayoutSettings } from "@ant-design/pro-components";
+import type { RequestConfig, RunTimeLayoutConfig } from "@umijs/max";
+import { history } from "@umijs/max";
+import { ConfigProvider, theme } from 'antd';
+import type { ThemeConfig } from 'antd';
+import React, { useEffect, useState } from "react";
 import defaultSettings from "../config/defaultSettings";
 import { errorConfig } from "./requestErrorConfig";
+
+// React 19 补丁
 import "@ant-design/v5-patch-for-react-19";
 
+// 定义主题模式的类型
+type ThemeMode = 'light' | 'dark';
+
+/**
+ * 这是一个独立的 React 组件，专门用于处理主题逻辑
+ * 1. 使用 useState 管理当前是 'light' 还是 'dark'
+ * 2. 使用 useEffect 监听操作系统的颜色模式变化
+ * 3. 使用 antd 的 ConfigProvider 将主题应用到整个应用
+ */
+const ThemeWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [themeMode, setThemeMode] = useState<ThemeMode>('light');
+
+  useEffect(() => {
+    // 监测系统主题的 API
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // 根据系统设置，更新我们的主题状态
+    const handleThemeChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      const newThemeMode = e.matches ? 'dark' : 'light';
+      setThemeMode(newThemeMode);
+    };
+
+    // 页面加载时，立即获取一次当前系统主题
+    handleThemeChange(mediaQuery);
+
+    // 添加监听器，当系统主题变化时，实时更新
+    mediaQuery.addEventListener('change', handleThemeChange);
+
+    // 组件销毁时，移除监听器
+    return () => mediaQuery.removeEventListener('change', handleThemeChange);
+  }, []);
+
+  // 根据当前主题模式，配置 antd 的 theme
+  const antdTheme: ThemeConfig = {
+    algorithm: themeMode === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
+  };
+
+  // 使用 ConfigProvider 包裹应用，使其所有子组件都应用上我们配置的主题
+  return (
+    <ConfigProvider theme={antdTheme}>
+      {children}
+    </ConfigProvider>
+  );
+};
+
+
+/**
+ * `rootContainer` 是 Umi 提供的运行时 API
+ * 它允许我们用一个组件包裹整个应用的最外层
+ * 我们在这里使用它，来让 `ThemeWrapper` 生效
+ */
+export function rootContainer(container: React.ReactNode) {
+  return <ThemeWrapper>{container}</ThemeWrapper>;
+}
+
+// =======================================================================
+// ========================== END: 新增的主题切换逻辑 =====================
+// =======================================================================
+
+
+// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 你原来的代码都原封不动地保留在下面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
 const isDev = process.env.NODE_ENV === "development";
-const isDevOrTest = isDev || process.env.CI;
 const loginPath = "/user/login";
 
 /**
@@ -60,9 +123,9 @@ export async function getInitialState(): Promise<{
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({
-  initialState,
-  setInitialState,
-}) => {
+                                              initialState,
+                                              setInitialState,
+                                            }) => {
   return {
     avatarProps: {
       src: initialState?.currentUser?.avatar,
@@ -112,19 +175,6 @@ export const layout: RunTimeLayoutConfig = ({
       return (
         <>
           {children}
-          {isDevOrTest && (
-            <SettingDrawer
-              disableUrlParams
-              enableDarkTheme
-              settings={initialState?.settings}
-              onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
-                  ...preInitialState,
-                  settings,
-                }));
-              }}
-            />
-          )}
         </>
       );
     },

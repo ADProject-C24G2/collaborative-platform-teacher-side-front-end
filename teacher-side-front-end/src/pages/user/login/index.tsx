@@ -52,6 +52,7 @@ const useStyles = createStyles(({ token }) => {
       display: "flex",
       flexDirection: "column",
       height: "100vh",
+      backgroundColor: token.colorBgContainer,
     },
   };
 });
