@@ -13,7 +13,6 @@ import {
 import {
   FormattedMessage,
   Helmet,
-  SelectLang,
   useIntl,
   useModel,
 } from "@umijs/max";
@@ -53,6 +52,7 @@ const useStyles = createStyles(({ token }) => {
       display: "flex",
       flexDirection: "column",
       height: "100vh",
+      backgroundColor: token.colorBgContainer,
     },
   };
 });
@@ -145,20 +145,9 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="Collaborative Practice Platform"
-          subTitle={intl.formatMessage({
-            id: "pages.layouts.userLayout.title",
-          })}
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <ActionIcons key="icons" />,
-          ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -174,8 +163,7 @@ const Login: React.FC = () => {
                   id: "pages.login.accountLogin.tab",
                   defaultMessage: "账户密码登录",
                 }),
-              },
-              // 手机号登录的 Tab 已被删除
+              }
             ]}
           />
 
@@ -243,24 +231,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
-// 其他登录方式的图标组件
-const ActionIcons = () => {
-  const { styles } = useStyles();
-  return (
-    <>
-      <AlipayCircleOutlined
-        key="AlipayCircleOutlined"
-        className={styles.action}
-      />
-      <TaobaoCircleOutlined
-        key="TaobaoCircleOutlined"
-        className={styles.action}
-      />
-      <WeiboCircleOutlined
-        key="WeiboCircleOutlined"
-        className={styles.action}
-      />
-    </>
-  );
-};

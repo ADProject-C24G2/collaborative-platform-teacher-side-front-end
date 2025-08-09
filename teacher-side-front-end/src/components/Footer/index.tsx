@@ -8,18 +8,18 @@ const Footer: React.FC = () => {
       style={{
         background: "none",
       }}
-      copyright="Powered by Team 08"
+      copyright="Powered by C24 Group2"
       links={[
         {
           key: "github",
           title: <GithubOutlined />,
-          href: "https://github.com/DingZihe/collaborative-platform-teacher-side-front-end",
+          href: "https://github.com/ADProject-C24G2/collaborative-platform-teacher-side-front-end.git",
           blankTarget: true,
         },
         {
           key: "collaborative-platform-teacher-side-front-end",
           title: "collaborative-platform-teacher-side-front-end",
-          href: "https://github.com/DingZihe/collaborative-platform-teacher-side-front-end",
+          href: "https://github.com/ADProject-C24G2/collaborative-platform-teacher-side-front-end.git",
           blankTarget: true,
         },
       ]}

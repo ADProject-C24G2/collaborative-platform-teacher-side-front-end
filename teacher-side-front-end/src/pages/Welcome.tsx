@@ -87,9 +87,16 @@ const Welcome: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel("@@initialState");
   return (
-    <PageContainer>
+    <PageContainer
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Card
         style={{
+          flex: 1,
           borderRadius: 8,
         }}
         styles={{
@@ -103,11 +110,7 @@ const Welcome: React.FC = () => {
       >
         <div
           style={{
-            backgroundPosition: "100% -30%",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "274px auto",
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+
           }}
         >
           <div

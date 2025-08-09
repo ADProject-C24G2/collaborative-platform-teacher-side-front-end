@@ -3,7 +3,6 @@
 import { join } from "node:path";
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./defaultSettings";
-import proxy from "./proxy";
 
 import routes from "./routes";
 
@@ -63,7 +62,7 @@ export default defineConfig({
    */
   proxy: {
     "/teacher": {
-      target: "http://localhost:8080",
+      target: process.env.REACT_APP_API_BASE || 'http://localhost:8080',
       changeOrigin: true,
     },
   },
@@ -89,10 +88,11 @@ export default defineConfig({
    * @name layout 插件
    * @doc https://umijs.org/docs/max/layout-menu
    */
-  title: "Ant Design Pro",
+  title: "Collaborative Practice Platform",
+  favicons: ['/favicon.ico'],
   layout: {
-    locale: true,
     ...defaultSettings,
+    locale: false,
   },
   /**
    * @name moment2dayjs 插件
@@ -108,11 +108,11 @@ export default defineConfig({
    * @doc https://umijs.org/docs/max/i18n
    */
   locale: {
-    // default zh-CN
-    default: "zh-CN",
+    // default en-US
+    default: "en-US",
     antd: true,
     // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
+    baseNavigator: false,
   },
   /**
    * @name antd 插件
@@ -171,6 +171,13 @@ export default defineConfig({
         "https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json",
       projectName: "swagger",
     },
+  ],
+  links: [
+    { rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' },
+
+    { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' },
+
+    { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
   ],
   // mock: {
   //   include: ["mock/**/*", "src/pages/**/_mock.ts"],
