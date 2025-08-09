@@ -1,17 +1,28 @@
-export type BasicGood = {
-  id: string;
-  name?: string;
-  barcode?: string;
-  price?: string;
-  num?: string | number;
-  amount?: string | number;
+// src/pages/profile/basic/data.d.ts
+
+export type Announcement = {
+  title: string;
+  createTime: string;
+  recipientType: "all" | "specific";
+  students?: {
+    studentId: string;
+    studentName: string;
+  }[];
+  content: string;
 };
 
-export type BasicProgress = {
-  key: string;
-  time: string;
-  rate: string;
-  status: string;
-  operator: string;
-  cost: string;
+// A single student's submission record
+export type Submission = {
+  key: string; // Unique key for React
+  student_id: string;
+  student_name: string;
+  whether_finish: 0 | 1; // 0: Finished, 1: In Progress
+  accuracy: string;
+  finish_time: string;
+};
+
+// A single assignment and all its submissions
+export type Assignment = {
+  assignment_name: string;
+  submissions: Submission[];
 };

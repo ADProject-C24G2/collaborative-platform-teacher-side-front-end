@@ -62,7 +62,7 @@ export default defineConfig({
    */
   proxy: {
     "/teacher": {
-      target: process.env.REACT_APP_API_BASE || 'http://localhost:8080',
+      target: process.env.REACT_APP_API_BASE || "http://localhost:8080",
       changeOrigin: true,
     },
   },
@@ -89,7 +89,7 @@ export default defineConfig({
    * @doc https://umijs.org/docs/max/layout-menu
    */
   title: "Collaborative Practice Platform",
-  favicons: ['/favicon.ico'],
+  favicons: ["/favicon.ico"],
   layout: {
     ...defaultSettings,
     locale: false,
@@ -173,15 +173,19 @@ export default defineConfig({
     },
   ],
   links: [
-    { rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' },
+    { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
 
-    { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' },
+    { rel: "icon", href: "/logo.svg", type: "image/svg+xml" },
 
-    { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+    {
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      href: "/apple-touch-icon.png",
+    },
   ],
-  // mock: {
-  //   include: ["mock/**/*", "src/pages/**/_mock.ts"],
-  // },
+  mock: {
+    include: ["mock/**/*", "src/pages/**/_mock.ts"],
+  },
   /**
    * @name 是否开启 mako
    * @description 使用 mako 极速研发

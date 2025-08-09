@@ -1,92 +1,108 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 
-const basicGoods = [
+// Mock data for announcements
+const announcements = [
   {
-    id: '1234561',
-    name: '矿泉水 550ml',
-    barcode: '12421432143214321',
-    price: '2.00',
-    num: '1',
-    amount: '2.00',
+    title: "Holiday Notice: May Day Break",
+    createTime: "2025-04-30 10:00:00",
+    recipientType: "all",
+    content:
+      "As per the national holiday schedule, the school will be closed for May Day from May 1st to May 5th.",
   },
   {
-    id: '1234562',
-    name: '凉茶 300ml',
-    barcode: '12421432143214322',
-    price: '3.00',
-    num: '2',
-    amount: '6.00',
-  },
-  {
-    id: '1234563',
-    name: '好吃的薯片',
-    barcode: '12421432143214323',
-    price: '7.00',
-    num: '4',
-    amount: '28.00',
-  },
-  {
-    id: '1234564',
-    name: '特别好吃的蛋卷',
-    barcode: '12421432143214324',
-    price: '8.50',
-    num: '3',
-    amount: '25.50',
+    title: "CS Department: Final Thesis Defense Schedule",
+    createTime: "2025-04-28 15:30:00",
+    recipientType: "specific",
+    students: [{ studentId: "S001", studentName: "John Doe" }],
+    content:
+      "The final thesis defense is scheduled for May 15th, 9:00 AM, at the main auditorium.",
   },
 ];
 
-const basicProgress = [
+// Mock data for assignment statuses
+const assignmentStatus = [
   {
-    key: '1',
-    time: '2017-10-01 14:10',
-    rate: '联系客户',
-    status: 'processing',
-    operator: '取货员 ID1234',
-    cost: '5mins',
+    assignment_name: "Mathematics: Chapter 1 Homework",
+    submissions: [
+      {
+        key: "math-001",
+        student_id: "S001",
+        student_name: "John Doe",
+        whether_finish: 0,
+        accuracy: "95%",
+        finish_time: "2025-08-09 10:20:00",
+      },
+      {
+        key: "math-002",
+        student_id: "S002",
+        student_name: "Jane Smith",
+        whether_finish: 0,
+        accuracy: "88%",
+        finish_time: "2025-08-09 11:30:00",
+      },
+      {
+        key: "math-003",
+        student_id: "S003",
+        student_name: "Peter Jones",
+        whether_finish: 1,
+        accuracy: "-",
+        finish_time: "-",
+      },
+      {
+        key: "math-004",
+        student_id: "S004",
+        student_name: "Mary Williams",
+        whether_finish: 0,
+        accuracy: "100%",
+        finish_time: "2025-08-08 20:00:00",
+      },
+    ],
   },
   {
-    key: '2',
-    time: '2017-10-01 14:05',
-    rate: '取货员出发',
-    status: 'success',
-    operator: '取货员 ID1234',
-    cost: '1h',
-  },
-  {
-    key: '3',
-    time: '2017-10-01 13:05',
-    rate: '取货员接单',
-    status: 'success',
-    operator: '取货员 ID1234',
-    cost: '5mins',
-  },
-  {
-    key: '4',
-    time: '2017-10-01 13:00',
-    rate: '申请审批通过',
-    status: 'success',
-    operator: '系统',
-    cost: '1h',
-  },
-  {
-    key: '5',
-    time: '2017-10-01 12:00',
-    rate: '发起退货申请',
-    status: 'success',
-    operator: '用户',
-    cost: '5mins',
+    assignment_name: "History Essay: The Significance of the Silk Road",
+    submissions: [
+      {
+        key: "hist-001",
+        student_id: "S001",
+        student_name: "John Doe",
+        whether_finish: 1,
+        accuracy: "-",
+        finish_time: "-",
+      },
+      {
+        key: "hist-002",
+        student_id: "S002",
+        student_name: "Jane Smith",
+        whether_finish: 0,
+        accuracy: "A+",
+        finish_time: "2025-08-10 01:15:00",
+      },
+      {
+        key: "hist-005",
+        student_id: "S005",
+        student_name: "David Brown",
+        whether_finish: 0,
+        accuracy: "A",
+        finish_time: "2025-08-09 23:45:00",
+      },
+    ],
   },
 ];
 
-function getProfileBasic(_: Request, res: Response) {
+// --- API Handlers ---
+function getAnnouncementList(_: Request, res: Response) {
   return res.json({
-    data: {
-      basicProgress,
-      basicGoods,
-    },
+    data: announcements,
+  });
+}
+
+function getAssignmentStatus(_: Request, res: Response) {
+  return res.json({
+    data: assignmentStatus,
   });
 }
 
 export default {
-  'GET  /api/profile/basic': getProfileBasic,
+  "GET /api/announcement/list": getAnnouncementList,
+  "GET /api/assignment/status": getAssignmentStatus,
 };
