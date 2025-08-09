@@ -46,13 +46,21 @@ export default [
     routes: [
       {
         name: "Create Class",
-        path: "class/create-class",
+        path: "create-class",
         component: "./class/create-class",
       },
       {
         name: "View Class",
-        path: "class/view-class",
+        path: "view-class",
         component: "./class/view-class",
+      },
+      {
+        path: "make-announcement",
+        component: "./class/view-class/make-announcement",
+      },
+      {
+        path: "manage-class",
+        component: "./class/view-class/manage-class",
       },
     ],
   },

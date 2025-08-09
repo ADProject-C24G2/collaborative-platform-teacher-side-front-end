@@ -16,6 +16,15 @@ export type CurrentUser = {
   address: string;
 };
 
+export type Annoumcement = {
+  classId: string;
+};
+
+export type classStudent = {
+  studentId: string;
+  studentName: string;
+};
+
 export type ListItemDataType = {
   id: string;
   className?: string; // 班级名称

@@ -10,6 +10,7 @@ import React from "react";
 import type { ListItemDataType } from "../data.d";
 import { queryFakeList } from "../service";
 import useStyles from "./index.style";
+import { useNavigate } from "@umijs/max"; // ✅ 导入
 
 // 可以删除或保留（如果不用于万级数据）
 export function formatWan(val: number) {
@@ -27,6 +28,7 @@ const Applications: React.FC = () => {
       count: 30,
     });
   });
+  const navigate = useNavigate();
 
   // 卡片底部信息组件
   const CardInfo: React.FC<{
@@ -70,13 +72,31 @@ const Applications: React.FC = () => {
             }}
             actions={[
               <Tooltip key="manage" title="Manage Class">
-                <EditOutlined />
+                <EditOutlined
+                  onClick={() => {
+                    // 使用 navigate 跳转
+                    navigate("/class/manage-class", {
+                      state: { classId: item.id },
+                    });
+                  }}
+                  // 可选：添加 style 让图标可点击
+                  style={{ cursor: "pointer" }}
+                />
               </Tooltip>,
               <Tooltip key="homework" title="Assign Homework">
                 <PlusOutlined />
               </Tooltip>,
               <Tooltip key="announcement" title="Make Announcement">
-                <SendOutlined />
+                <SendOutlined
+                  onClick={() => {
+                    // 使用 navigate 跳转
+                    navigate("/class/make-announcement", {
+                      state: { classId: item.id },
+                    });
+                  }}
+                  // 可选：添加 style 让图标可点击
+                  style={{ cursor: "pointer" }}
+                />
               </Tooltip>,
               <Dropdown
                 menu={{
