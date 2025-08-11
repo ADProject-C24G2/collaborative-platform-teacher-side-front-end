@@ -9,7 +9,7 @@ export async function queryAnnouncementList(params: {
 }): Promise<{
   data: Announcement[];
 }> {
-  return request("/api/announcement/list", { params });
+  return request("/teacher/class/get-announcement", { params });
 }
 
 export async function queryAssignmentStatus(params: {

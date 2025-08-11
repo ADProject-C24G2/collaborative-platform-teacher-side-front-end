@@ -1,3 +1,4 @@
+// select.tsx (no changes needed)
 import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useRequest } from "@umijs/max";
 import {
@@ -34,12 +35,23 @@ type SelectedQuestion = {
   question_content: string;
 };
 
+type LocationState = {
+  classId?: string;
+  selectedQuestions?: SelectedQuestion[];
+  currentValues?: any;
+};
+
 const Articles: FC = () => {
   const [form] = Form.useForm();
   const { styles } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const { classId, currentValues } = (location.state as any) || {};
+  const state = (location.state as LocationState) || {};
+  const {
+    classId,
+    currentValues,
+    selectedQuestions: initialSelected = [],
+  } = state;
 
   const [formValues, setFormValues] = useState<Omit<Params, "count">>({});
   const [revealedAnswers, setRevealedAnswers] = useState<Set<number>>(
@@ -47,7 +59,7 @@ const Articles: FC = () => {
   );
   const [selectedQuestions, setSelectedQuestions] = useState<
     Map<number, SelectedQuestion>
-  >(new Map());
+  >(() => new Map(initialSelected.map((q) => [Number(q.questionId), q])));
 
   const { data, loading, loadMore, loadingMore } = useRequest(
     (d?: { list: QuestionDataType[] }) => {
@@ -95,13 +107,13 @@ const Articles: FC = () => {
   const handleConfirmSelection = () => {
     const questionsToReturn = Array.from(selectedQuestions.values());
 
-    // IMPORTANT: Replace '/path/to/your/form' with the actual route
+    // IMPORTANT: Replace '/class/assignment-form' with the actual route if different
     // for the AssignAssignmentForm component.
     navigate("/class/assignment-form", {
       state: {
         classId,
         selectedQuestions: questionsToReturn,
-        currentValues: (location.state as any)?.currentValues,
+        currentValues,
       },
     });
   };
@@ -116,19 +128,17 @@ const Articles: FC = () => {
 
   const loadMoreDom = !noMoreData && (
     <div style={{ textAlign: "center", marginTop: 24 }}>
-           {" "}
+      {" "}
       <Button onClick={loadMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
-               {" "}
+        {" "}
         {loadingMore ? (
           <span>
             <LoadingOutlined /> Loading...
           </span>
         ) : (
           "Load More"
-        )}
-             {" "}
-      </Button>
-         {" "}
+        )}{" "}
+      </Button>{" "}
     </div>
   );
 
@@ -139,10 +149,9 @@ const Articles: FC = () => {
         type="primary"
         tooltip={`Confirm Selection (${selectedQuestions.size} selected)`}
         onClick={handleConfirmSelection}
-      />
-           {" "}
+      />{" "}
       <Card bordered={false}>
-               {" "}
+        {" "}
         <Form
           layout="inline"
           form={form}
@@ -198,18 +207,15 @@ const Articles: FC = () => {
                 ))}
               </TagSelect>
             </FormItem>
-          </StandardFormRow>
-                 {" "}
-        </Form>
-             {" "}
-      </Card>
-           {" "}
+          </StandardFormRow>{" "}
+        </Form>{" "}
+      </Card>{" "}
       <Card
         style={{ marginTop: 24 }}
         bordered={false}
         bodyStyle={{ padding: "8px 32px 32px 32px" }}
       >
-               {" "}
+        {" "}
         <List<QuestionDataType>
           size="large"
           loading={loading && list.length === 0}
@@ -244,7 +250,8 @@ const Articles: FC = () => {
                   {item.image && (
                     <Col xs={24} sm={8} md={6}>
                       <img
-                        src={item.image}
+                        // 使用模板字符串（反引号 ``）来拼接出完整的 Data URL
+                        src={`data:image/png;base64,${item.image}`}
                         alt={`Question ${item.id}`}
                         style={{ maxWidth: "100%", borderRadius: "8px" }}
                       />
@@ -294,10 +301,8 @@ const Articles: FC = () => {
               </List.Item>
             );
           }}
-        />
-             {" "}
-      </Card>
-         {" "}
+        />{" "}
+      </Card>{" "}
     </>
   );
 };

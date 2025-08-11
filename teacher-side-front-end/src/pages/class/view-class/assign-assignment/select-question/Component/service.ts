@@ -4,7 +4,7 @@ import type { Params, QuestionDataType } from "./data.d";
 export async function queryFakeList(
   params: Params,
 ): Promise<{ data: { list: QuestionDataType[] } }> {
-  return request("/api/fake_list", {
+  return request("/teacher/class/get-questions", {
     method: "POST",
     data: params,
   });

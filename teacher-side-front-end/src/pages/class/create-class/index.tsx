@@ -25,6 +25,7 @@ const BasicForm: FC<Record<string, any>> = () => {
     },
   });
   const onFinish = async (values: Record<string, any>) => {
+    console.log("✅ 开始提交表单");
     run(values);
   };
   return (

@@ -49,6 +49,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
   });
 
   const onFinish = async (values: Record<string, any>) => {
+    console.log("✅ 开始提交表单");
     // 4. Send with classId
     const submitData = {
       ...values,
