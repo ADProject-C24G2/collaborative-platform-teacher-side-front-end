@@ -10,12 +10,7 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from "@ant-design/pro-components";
-import {
-  FormattedMessage,
-  Helmet,
-  useIntl,
-  useModel,
-} from "@umijs/max";
+import { FormattedMessage, Helmet, useIntl, useModel } from "@umijs/max";
 import { Alert, App, Tabs } from "antd";
 import { createStyles } from "antd-style";
 import React, { useState } from "react";
@@ -163,7 +158,7 @@ const Login: React.FC = () => {
                   id: "pages.login.accountLogin.tab",
                   defaultMessage: "账户密码登录",
                 }),
-              }
+              },
             ]}
           />
 

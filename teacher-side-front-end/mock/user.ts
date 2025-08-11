@@ -21,7 +21,9 @@ const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
  * 如果是 pro 的预览，默认是有权限的
  */
 let access =
-  ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === "site" ? "admin" : "";
+  ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === "site"
+    ? "admin"
+    : "admin";
 
 const getAccess = () => {
   return access;
