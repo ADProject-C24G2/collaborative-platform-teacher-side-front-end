@@ -62,7 +62,9 @@ export default defineConfig({
    */
   proxy: {
     "/teacher": {
-      target: process.env.REACT_APP_API_BASE || "http://localhost:8080",
+      target:
+        process.env.REACT_APP_API_BASE ||
+        "http://adproject-backend.southeastasia.cloudapp.azure.com",
       changeOrigin: true,
     },
   },
