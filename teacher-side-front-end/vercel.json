@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://adproject-backend.southeastasia.cloudapp.azure.com/:path*"
+    },
+    {
+      "source": "/teacher/:path*",
+      "destination": "http://adproject-backend.southeastasia.cloudapp.azure.com/:path*"
+    }
+  ]
+}
