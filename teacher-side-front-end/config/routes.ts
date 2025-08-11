@@ -62,6 +62,21 @@ export default [
         path: "manage-class",
         component: "./class/view-class/manage-class",
       },
+      {
+        path: "assignment-form",
+        component: "./class/view-class/assign-assignment/assignment-form",
+      },
+      {
+        path: "assignment",
+        component: "./class/view-class/assign-assignment/select-question",
+        routes: [
+          {
+            path: "assign-assignment",
+            component:
+              "./class/view-class/assign-assignment/select-question/Component",
+          },
+        ],
+      },
     ],
   },
 ];

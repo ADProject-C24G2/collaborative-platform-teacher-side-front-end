@@ -1,6 +1,6 @@
 import type { ProColumns } from "@ant-design/pro-components";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
-import { useLocation, useRequest } from "@umijs/max";
+import { useLocation, useNavigate, useRequest } from "@umijs/max";
 import { Badge, Card, Descriptions, Divider, Spin } from "antd";
 import type { FC } from "react";
 import React from "react";
@@ -48,6 +48,7 @@ const assignmentColumns: ProColumns<Submission>[] = [
 const Basic: FC = () => {
   const { styles } = useStyles();
   const location = useLocation();
+  const navigate = useNavigate();
   const classId = (location.state as { classId?: string })?.classId;
 
   // Fetch announcement data, passing classId
@@ -69,7 +70,8 @@ const Basic: FC = () => {
   );
 
   return (
-    <PageContainer>
+    // Add onBack prop to enable the back button
+    <PageContainer onBack={() => navigate(-1)}>
            {" "}
       <Card variant="borderless">
         {/* --- Announcement Module --- */}       {" "}

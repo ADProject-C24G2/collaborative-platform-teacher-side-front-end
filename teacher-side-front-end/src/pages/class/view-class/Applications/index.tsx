@@ -83,8 +83,17 @@ const Applications: React.FC = () => {
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>,
-              <Tooltip key="homework" title="Assign Homework">
-                <PlusOutlined />
+              <Tooltip key="homework" title="Assign Assignment">
+                <PlusOutlined
+                  onClick={() => {
+                    // 使用 navigate 跳转
+                    navigate("/class/assignment-form", {
+                      state: { classId: item.id },
+                    });
+                  }}
+                  // 可选：添加 style 让图标可点击
+                  style={{ cursor: "pointer" }}
+                />
               </Tooltip>,
               <Tooltip key="announcement" title="Make Announcement">
                 <SendOutlined
