@@ -60,12 +60,6 @@ export default defineConfig({
    * @doc 代理介绍 https://umijs.org/docs/guides/proxy
    * @doc 代理配置 https://umijs.org/docs/api/config#proxy
    */
-  proxy: {
-    "/teacher": {
-      target: process.env.REACT_APP_API_BASE || "http://localhost:8080",
-      changeOrigin: true,
-    },
-  },
 
   /**
    * @name 快速热更新配置
