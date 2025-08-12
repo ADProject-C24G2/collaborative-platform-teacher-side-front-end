@@ -44,8 +44,8 @@ const Search: FC<SearchProps> = () => {
       content={
         <div style={{ textAlign: "center" }}>
           <Input.Search
-            placeholder="请输入"
-            enterButton="搜索"
+            placeholder="Find any Question"
+            enterButton="Search"
             size="large"
             onSearch={handleFormSubmit}
             style={{ maxWidth: 522, width: "100%" }}
@@ -54,8 +54,9 @@ const Search: FC<SearchProps> = () => {
       }
       tabActiveKey={getTabKey()}
       onTabChange={handleTabChange}
+      className="flex-fill-layout" // <--- 在这里添加新的 className
     >
-      <Outlet />
+      <Outlet/>
     </PageContainer>
   );
 };
