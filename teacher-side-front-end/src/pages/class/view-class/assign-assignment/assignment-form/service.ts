@@ -9,7 +9,7 @@ interface AssignAssignmentParams {
 }
 
 export async function assignAssignment(params: AssignAssignmentParams) {
-  return request("/teacher/class/assign-assignment", {
+  return request("/teacher/class/make-assignment", {
     method: "POST",
     data: params,
   });

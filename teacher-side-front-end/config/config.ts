@@ -192,4 +192,10 @@ export default defineConfig({
   define: {
     "process.env.CI": process.env.CI,
   },
+  proxy: {
+    "/teacher": {
+      target: process.env.REACT_APP_API_BASE || "http://localhost:8080",
+      changeOrigin: true,
+    },
+  },
 });
