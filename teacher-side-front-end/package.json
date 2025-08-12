@@ -38,10 +38,12 @@
     "@ant-design/icons": "^5.6.1",
     "@ant-design/pro-components": "^2.8.9",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@tanstack/react-virtual": "^3.13.12",
     "antd": "^5.26.4",
     "antd-style": "^3.7.0",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
+    "depcheck": "^1.4.7",
     "numeral": "^2.0.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
