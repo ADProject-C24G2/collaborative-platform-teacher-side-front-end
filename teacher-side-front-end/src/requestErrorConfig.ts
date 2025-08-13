@@ -100,16 +100,20 @@ export const errorConfig: RequestConfig = {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
 
-      if (data?.code === 0) {
-        message.error("Request failed!");
-      }
-
       if (data?.code === 2) {
         message.success("Successfully make announcement!");
       }
 
       if (data?.code === 3) {
         message.error("Sorry, nobody is in the class!");
+        const error: any = new Error("Silent error");
+        error.name = 'BizError';
+        error.info = {
+          ...data,
+          showType: 0,
+        };
+
+        throw error;
       }
 
       return response;

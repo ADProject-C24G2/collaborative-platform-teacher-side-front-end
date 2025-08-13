@@ -216,10 +216,10 @@ const Applications: FC = () => {
             }}
           >
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
-              <StandardFormRow title="GRADE" block><FormItem name="grade" style={{ marginBottom: 0 }}><TagSelect expandable>{gradeOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-              <StandardFormRow title="SUBJECT" block><FormItem name="subject" style={{ marginBottom: 0 }}><TagSelect expandable>{subjectOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-              <StandardFormRow title="CATEGORY" block><FormItem name="category" style={{ marginBottom: 0 }}><TagSelect expandable>{categoryOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-              <StandardFormRow title="TOPIC" block><FormItem name="topic" style={{ marginBottom: 0 }}><TagSelect expandable>{topicOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="GRADE" block><FormItem name="grade" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{gradeOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="SUBJECT" block><FormItem name="subject" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{subjectOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="CATEGORY" block><FormItem name="category" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{categoryOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="TOPIC" block><FormItem name="topic" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{topicOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
             </Space>
           </Form>
         </Card>

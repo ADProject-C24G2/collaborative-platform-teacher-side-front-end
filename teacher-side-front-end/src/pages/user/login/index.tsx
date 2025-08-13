@@ -154,7 +154,7 @@ const Login: React.FC = () => {
                   size: "large",
                   prefix: <MailOutlined />, // Changed icon
                 }}
-                placeholder={"Please enter your email (Teachers only)"}
+                placeholder={"E-mail"}
                 rules={[
                   {
                     required: true,
@@ -172,7 +172,7 @@ const Login: React.FC = () => {
                   size: "large",
                   prefix: <LockOutlined />,
                 }}
-                placeholder={"Please enter your password"}
+                placeholder={"Password"}
                 rules={[
                   {
                     required: true,
