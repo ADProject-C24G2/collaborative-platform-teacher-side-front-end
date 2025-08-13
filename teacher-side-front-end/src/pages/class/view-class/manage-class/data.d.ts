@@ -14,15 +14,15 @@ export type Announcement = {
 // A single student's submission record
 export type Submission = {
   key: string; // Unique key for React
-  student_id: string;
-  student_name: string;
-  whether_finish: 0 | 1; // 0: Finished, 1: In Progress
+  studentId: string;
+  studentName: string;
+  whetherFinish: 0 | 1; // 0: Finished, 1: In Progress
   accuracy: string;
-  finish_time: string;
+  finishTime: string;
 };
 
 // A single assignment and all its submissions
 export type Assignment = {
-  assignment_name: string;
+  assignmentName: string;
   submissions: Submission[];
 };

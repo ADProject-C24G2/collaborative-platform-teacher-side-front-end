@@ -17,5 +17,5 @@ export async function queryAssignmentStatus(params: {
 }): Promise<{
   data: Assignment[];
 }> {
-  return request("/api/assignment/status", { params });
+  return request("/teacher/class/assignment-status", { params });
 }
