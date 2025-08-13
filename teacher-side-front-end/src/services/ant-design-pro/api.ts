@@ -63,6 +63,20 @@ export async function rule(
   });
 }
 
+export async function register(
+  body: API.LoginParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.LoginResult>("/teacher/class/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 更新规则 PUT /api/rule */
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>("/api/rule", {

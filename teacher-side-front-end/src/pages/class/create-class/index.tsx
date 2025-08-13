@@ -12,6 +12,7 @@ import { Card, message } from "antd";
 import type { FC } from "react";
 import { fakeSubmitForm } from "./service";
 import useStyles from "./style.style";
+import moment from "moment";
 
 const BasicForm: FC<Record<string, any>> = () => {
   const { styles } = useStyles();
@@ -63,8 +64,28 @@ const BasicForm: FC<Record<string, any>> = () => {
                 required: true,
                 message: "Please select the start and end dates.",
               },
+              {
+                validator: (_rule, value) => {
+                  if (!value || !value[1]) {
+                    return Promise.resolve(); // 如果没填，交给 required 处理
+                  }
+                  const endDate = value[1]; // end date 是数组第二个值 (moment object)
+                  const now = moment(); // 当前时间
+
+                  if (
+                    endDate.isBefore(now, "day") &&
+                    !endDate.isSame(now, "day")
+                  ) {
+                    // 结束日期 < 今天（不包括今天）
+                    return Promise.reject(
+                      new Error("The end date cannot be earlier than today."),
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
             ]}
-            placeholder={["Start date", "Date closed"]}
+            placeholder={["Start date", "End date"]}
           />
           <ProFormTextArea
             label="Class Description"

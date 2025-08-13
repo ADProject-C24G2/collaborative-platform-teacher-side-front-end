@@ -112,6 +112,14 @@ export const errorConfig: RequestConfig = {
         message.error("Sorry, nobody is in the class!");
       }
 
+      if (data?.code === 4) {
+        message.error("The email address is already in use!");
+      }
+
+      if (data?.code === 5) {
+        message.success("Registered successfully!");
+      }
+
       return response;
     },
   ],

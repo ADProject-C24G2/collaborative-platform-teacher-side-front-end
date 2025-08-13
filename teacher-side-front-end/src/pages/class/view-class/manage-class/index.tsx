@@ -9,6 +9,30 @@ import type { Announcement, Assignment, Submission } from "./data.d";
 import { queryAnnouncementList, queryAssignmentStatus } from "./service";
 import useStyles from "./style.style";
 
+//time set
+const formatTimeArray = (timeArray: number[]): string => {
+  if (!Array.isArray(timeArray) || timeArray.length < 6) return "Invalid Date";
+
+  const [year, month, day, hour, minute, second] = timeArray;
+  const date = new Date(year, month - 1, day, hour, minute, second); // ⚠️ 月份从 0 开始，所以要 -1
+
+  // 检查是否为有效日期
+  if (isNaN(date.getTime())) return "Invalid Date";
+
+  // 格式化为：YYYY-MM-DD HH:mm:ss
+  return date
+    .toLocaleString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+    .replace(",", ""); // 去掉逗号，变成 "13/08/2025 02:59:23"
+};
+
 // --- Assignment table columns definition (in English) ---
 const assignmentColumns: ProColumns<Submission>[] = [
   {
@@ -84,7 +108,7 @@ const Basic: FC = () => {
               type="inner"
               title={item.title}
               style={{ marginBottom: 24 }}
-              extra={`Sent Time: ${item.createTime}`}
+              extra={`Sent Time: ${formatTimeArray(item.createTime)}`}
             >
                            {" "}
               <Descriptions column={1}>

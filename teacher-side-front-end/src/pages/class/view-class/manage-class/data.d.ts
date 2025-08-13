@@ -2,7 +2,7 @@
 
 export type Announcement = {
   title: string;
-  createTime: string;
+  createTime: number[];
   recipientType: "all" | "specific";
   students?: {
     studentId: string;
