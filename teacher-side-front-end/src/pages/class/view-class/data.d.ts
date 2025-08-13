@@ -27,6 +27,7 @@ export type classStudent = {
 
 export type ListItemDataType = {
   id: string;
+  token: string;
   className?: string; // 班级名称
   studentAmount?: number; // 学生数量
   ongoingAssignment?: number; //

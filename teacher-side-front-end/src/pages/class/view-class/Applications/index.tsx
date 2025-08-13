@@ -1,18 +1,18 @@
 import {
+  CopyOutlined,
   EditOutlined,
   EllipsisOutlined,
   PlusOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 import { useRequest } from "@umijs/max";
-import { Avatar, Card, Dropdown, List, Tooltip } from "antd";
+import { Avatar, Card, Dropdown, List, Tooltip, message } from "antd";
 import React from "react";
 import type { ListItemDataType } from "../data.d";
 import { queryFakeList } from "../service";
 import useStyles from "./index.style";
-import { useNavigate } from "@umijs/max"; // ✅ 导入
+import { useNavigate } from "@umijs/max";
 
-// 可以删除或保留（如果不用于万级数据）
 export function formatWan(val: number) {
   const v = val;
   if (!v || Number.isNaN(v)) return "";
@@ -22,7 +22,6 @@ export function formatWan(val: number) {
 const Applications: React.FC = () => {
   const { styles: stylesApplications } = useStyles();
 
-  // 获取班级列表数据
   const { data: listData } = useRequest(() => {
     return queryFakeList({
       count: 30,
@@ -30,7 +29,6 @@ const Applications: React.FC = () => {
   });
   const navigate = useNavigate();
 
-  // 卡片底部信息组件
   const CardInfo: React.FC<{
     classSize: React.ReactNode;
     ongoingAssignment: React.ReactNode;
@@ -68,53 +66,78 @@ const Applications: React.FC = () => {
             styles={{
               body: {
                 paddingBottom: 20,
+                position: "relative",
               },
             }}
             actions={[
               <Tooltip key="manage" title="Manage Class">
                 <EditOutlined
                   onClick={() => {
-                    // 使用 navigate 跳转
                     navigate("/class/manage-class", {
                       state: { classId: item.id },
                     });
                   }}
-                  // 可选：添加 style 让图标可点击
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>,
               <Tooltip key="homework" title="Assign Assignment">
                 <PlusOutlined
                   onClick={() => {
-                    // 使用 navigate 跳转
                     navigate("/class/assignment-form", {
                       state: { classId: item.id },
                     });
                   }}
-                  // 可选：添加 style 让图标可点击
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>,
               <Tooltip key="announcement" title="Make Announcement">
                 <SendOutlined
                   onClick={() => {
-                    // 使用 navigate 跳转
                     navigate("/class/make-announcement", {
                       state: { classId: item.id },
                     });
                   }}
-                  // 可选：添加 style 让图标可点击
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>,
             ]}
           >
-            {/* 卡片头部：班级名称 + 图标 */}
+            {/* ✅ 修改部分开始 */}
+            {item.token && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  zIndex: 1,
+                  // 使用 flex 布局对齐文字和图标
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px", // 控制文字和图标的间距
+                  color: "rgba(0, 0, 0, 0.45)", // 统一设置颜色
+                  fontSize: "14px", // 统一设置字体大小
+                }}
+              >
+                {/* 添加 'token' 文字提示 */}
+                <span>token</span>
+                <Tooltip title="Copy Class Token">
+                  <CopyOutlined
+                    style={{ cursor: "pointer", fontSize: "16px" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(item.token);
+                      message.success("Token copied!");
+                    }}
+                  />
+                </Tooltip>
+              </div>
+            )}
+            {/* ✅ 修改部分结束 */}
+
             <Card.Meta
               avatar={<Avatar size="small" src={item.avatar} />}
-              title={item.className || item.title} // 兼容性：优先用 className
+              title={item.className || item.title}
             />
-            {/* 卡片底部：班级人数和未读消息 */}
             <div>
               <CardInfo
                 classSize={item.studentAmount ?? 0}

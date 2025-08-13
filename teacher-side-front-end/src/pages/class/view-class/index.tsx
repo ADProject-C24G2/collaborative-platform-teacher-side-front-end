@@ -67,7 +67,7 @@ const TagList: React.FC<{
 
   return (
     <div className={styles.tags}>
-      <div className={styles.tagsTitle}>标签</div>
+      <div className={styles.tagsTitle}>Tag</div>
       {[...(tags || []), ...newTags].map((item) => (
         <Tag key={item.key}>{item.label}</Tag>
       ))}
