@@ -2,14 +2,11 @@ import {
   PageContainer,
   ProForm,
   ProFormDateRangePicker,
-  ProFormDependency,
   ProFormDigit,
   ProFormRadio,
-  ProFormSelect,
   ProFormText,
   ProFormTextArea,
 } from "@ant-design/pro-components";
-import { InputNumber } from "antd";
 import { useRequest } from "@umijs/max";
 import { Card, message } from "antd";
 import type { FC } from "react";
