@@ -14,7 +14,7 @@ import { useNavigate } from "@umijs/max"; // ✅ 导入
 
 // 可以删除或保留（如果不用于万级数据）
 export function formatWan(val: number) {
-  const v = val * 1;
+  const v = val;
   if (!v || Number.isNaN(v)) return "";
   return val > 10000 ? `${Math.floor(val / 10000)}万` : val;
 }

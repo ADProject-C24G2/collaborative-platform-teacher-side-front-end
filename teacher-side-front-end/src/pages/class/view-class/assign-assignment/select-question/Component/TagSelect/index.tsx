@@ -103,9 +103,9 @@ const TagSelect: FC<TagSelectProps> & {
   };
   const checkedAll = getAllTags().length === value?.length;
   const {
-    expandText = "展开",
-    collapseText = "收起",
-    selectAllText = "全部",
+    expandText = "Expand",
+    collapseText = "Collapse",
+    selectAllText = "Select All",
   } = actionsText;
   const cls = classNames(styles.tagSelect, className, {
     [styles.hasExpandTag]: expandable,
