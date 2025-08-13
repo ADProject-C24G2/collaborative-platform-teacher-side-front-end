@@ -2,6 +2,7 @@ import { PageContainer } from "@ant-design/pro-components";
 import { history, Outlet, useLocation, useMatch } from "@umijs/max";
 import { Input } from "antd";
 import type { FC } from "react";
+import { useState } from "react";
 
 type SearchProps = {
   children?: React.ReactNode;
@@ -10,6 +11,9 @@ type SearchProps = {
 const Search: FC<SearchProps> = () => {
   const location = useLocation();
   const match = useMatch(location.pathname);
+  // 2. 创建一个 state 来存储已提交的搜索值
+  const [submittedSearch, setSubmittedSearch] = useState<string>('');
+
   const handleTabChange = (key: string) => {
     const url =
       match?.pathname === "/"
@@ -24,9 +28,9 @@ const Search: FC<SearchProps> = () => {
     }
   };
 
+  // 3. 实现 handleFormSubmit 函数，更新 state
   const handleFormSubmit = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log(value);
+    setSubmittedSearch(value.trim());
   };
 
   const getTabKey = () => {
@@ -54,9 +58,10 @@ const Search: FC<SearchProps> = () => {
       }
       tabActiveKey={getTabKey()}
       onTabChange={handleTabChange}
-      className="flex-fill-layout" // <--- 在这里添加新的 className
+      className="flex-fill-layout"
     >
-      <Outlet/>
+      {/* 4. 通过 Outlet 的 context 属性将 state 传递给子路由 */}
+      <Outlet context={{ submittedSearch }} />
     </PageContainer>
   );
 };

@@ -2,7 +2,12 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Tag } from "antd";
 import classNames from "classnames";
 import { useMergedState } from "rc-util";
-import React, { type FC, useState } from "react";
+import React, {
+  type FC,
+  useState,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import useStyles from "./index.style";
 
 const { CheckableTag } = Tag;
@@ -24,7 +29,6 @@ const TagSelectOption: React.FC<TagSelectOptionProps> & {
     {children}
   </CheckableTag>
 );
-
 TagSelectOption.isTagSelectOption = true;
 
 type TagSelectOptionElement = React.ReactElement<
@@ -61,6 +65,8 @@ const TagSelect: FC<TagSelectProps> & {
     actionsText = {},
   } = props;
   const [expand, setExpand] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [showExpand, setShowExpand] = useState<boolean>(false);
 
   const [value, setValue] = useMergedState<(string | number)[]>(
     props.defaultValue || [],
@@ -71,10 +77,24 @@ const TagSelect: FC<TagSelectProps> & {
     },
   );
 
+  useLayoutEffect(() => {
+    // 仅在 expandable 为 true 且 ref 存在时执行
+    if (expandable && containerRef.current) {
+      const { scrollHeight, offsetHeight } = containerRef.current;
+      // 如果滚动高度大于可见高度，说明内容溢出，需要显示展开按钮
+      if (scrollHeight > offsetHeight) {
+        setShowExpand(true);
+      } else {
+        setShowExpand(false);
+      }
+    }
+  }, [children, expandable]); // 当 children 或 expandable 属性变化时重新计算
+
   const isTagSelectOption = (node: TagSelectOptionElement) =>
     node?.type &&
     (node.type.isTagSelectOption ||
       node.type.displayName === "TagSelectOption");
+
   const getAllTags = () => {
     const childrenArray = React.Children.toArray(
       children,
@@ -84,6 +104,7 @@ const TagSelect: FC<TagSelectProps> & {
       .map((child) => child.props.value);
     return checkedTags || [];
   };
+
   const onSelectAll = (checked: boolean) => {
     let checkedTags: (string | number)[] = [];
     if (checked) {
@@ -91,6 +112,7 @@ const TagSelect: FC<TagSelectProps> & {
     }
     setValue(checkedTags);
   };
+
   const handleTagChange = (tag: string | number, checked: boolean) => {
     const checkedTags: (string | number)[] = [...(value || [])];
     const index = checkedTags.indexOf(tag);
@@ -101,18 +123,21 @@ const TagSelect: FC<TagSelectProps> & {
     }
     setValue(checkedTags);
   };
+
   const checkedAll = getAllTags().length === value?.length;
   const {
     expandText = "Expand",
     collapseText = "Collapse",
-    selectAllText = "Select All",
+    selectAllText = "All",
   } = actionsText;
+
   const cls = classNames(styles.tagSelect, className, {
     [styles.hasExpandTag]: expandable,
     [styles.expanded]: expand,
   });
+
   return (
-    <div className={cls} style={style}>
+    <div ref={containerRef} className={cls} style={style}>
       {hideCheckAll ? null : (
         <CheckableTag
           checked={checkedAll}
@@ -134,7 +159,8 @@ const TagSelect: FC<TagSelectProps> & {
           }
           return child;
         })}
-      {expandable && (
+
+      {expandable && showExpand && (
         <a
           className={styles.trigger}
           onClick={() => {
@@ -156,5 +182,6 @@ const TagSelect: FC<TagSelectProps> & {
     </div>
   );
 };
+
 TagSelect.Option = TagSelectOption;
 export default TagSelect;
