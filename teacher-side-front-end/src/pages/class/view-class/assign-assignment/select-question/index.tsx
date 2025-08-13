@@ -2,6 +2,7 @@ import { PageContainer } from "@ant-design/pro-components";
 import { history, Outlet, useLocation, useMatch } from "@umijs/max";
 import { Input } from "antd";
 import type { FC } from "react";
+import { useState } from "react";
 
 type SearchProps = {
   children?: React.ReactNode;
@@ -10,6 +11,8 @@ type SearchProps = {
 const Search: FC<SearchProps> = () => {
   const location = useLocation();
   const match = useMatch(location.pathname);
+  const [submittedSearch, setSubmittedSearch] = useState<string>('');
+
   const handleTabChange = (key: string) => {
     const url =
       match?.pathname === "/"
@@ -25,8 +28,7 @@ const Search: FC<SearchProps> = () => {
   };
 
   const handleFormSubmit = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log(value);
+    setSubmittedSearch(value.trim());
   };
 
   const getTabKey = () => {
@@ -54,9 +56,9 @@ const Search: FC<SearchProps> = () => {
       }
       tabActiveKey={getTabKey()}
       onTabChange={handleTabChange}
-      className="flex-fill-layout" // <--- 在这里添加新的 className
+      className="flex-fill-layout"
     >
-      <Outlet/>
+      <Outlet context={{ submittedSearch }} />
     </PageContainer>
   );
 };

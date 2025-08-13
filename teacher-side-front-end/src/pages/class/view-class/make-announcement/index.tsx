@@ -1,7 +1,6 @@
 import {
   PageContainer,
   ProForm,
-  ProFormList,
   ProFormRadio,
   ProFormSelect,
   ProFormText,
@@ -12,15 +11,13 @@ import { Button, Card, message } from "antd";
 import type { FC } from "react";
 import { useLocation } from "@umijs/max";
 import { fakeSubmitForm, fetchStudentList } from "../service";
-import useStyles from "./style.style";
-import { useRequest } from "@umijs/max";
+import { useRequest, useNavigate } from "@umijs/max";
 
 const AnnouncementForm: FC<Record<string, any>> = () => {
   interface LocationState {
     classId?: string;
   }
-
-  const { styles } = useStyles();
+  const navigate = useNavigate();
 
   // 1. Receive the passed classId
   const location = useLocation();
@@ -34,20 +31,22 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
     loading: studentListLoading,
     error,
   } = useRequest(() => fetchStudentList(classId), {
-    // ✅ 依赖 classId，当 classId 变化时重新请求
+    // 依赖 classId，当 classId 变化时重新请求
     refreshDeps: [classId],
     onError: (err) => {
       message.error(`Failed to load student list: ${err.message}`);
     },
   });
 
-  const { run, loading } = useRequest(fakeSubmitForm, {
+  const { run } = useRequest(fakeSubmitForm, {
     manual: true,
-    onSuccess: () => {},
+    onSuccess: () => {
+      navigate("/class/view-class")
+    }
   });
 
   const onFinish = async (values: Record<string, any>) => {
-    console.log("✅ 开始提交表单");
+    console.log("开始提交表单");
     // 4. Send with classId
     const submitData = {
       ...values,

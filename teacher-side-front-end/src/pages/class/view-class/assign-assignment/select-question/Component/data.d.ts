@@ -4,6 +4,7 @@
 export interface Params {
   count: number;
   page?: number; // Added for pagination
+  keyword?: string;
   grade?: string[];
   subject?: string[];
   category?: string[];

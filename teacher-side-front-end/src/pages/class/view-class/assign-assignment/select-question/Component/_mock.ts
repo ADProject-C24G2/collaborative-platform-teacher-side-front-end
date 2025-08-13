@@ -16,6 +16,7 @@ export const gradeOptions: DefaultOptionType[] = [
   { value: "grade10", label: "Grade 10" },
   { value: "grade11", label: "Grade 11" },
   { value: "grade12", label: "Grade 12" },
+  { value: "other", label: "Other" },
 ];
 
 // 2. 学科选项 (Subject Options)
@@ -24,6 +25,7 @@ export const subjectOptions: DefaultOptionType[] = [
   { value: "language science", label: "Language Science" },
   { value: "natural science", label: "Natural Science" },
   { value: "social science", label: "Social Science" },
+  { value: "other", label: "Other" },
 ];
 
 // 3. 类别选项 (Category Options)
@@ -69,6 +71,8 @@ export const categoryOptions: DefaultOptionType[] = [
   { value: "persuasive strategies", label: "Persuasive strategies" },
   { value: "verb tense", label: "Verb tense" },
   { value: "word usage and nuance", label: "Word usage and nuance" },
+  // 其他
+  { value: "other", label: "Other" },
 ];
 
 // 4. 主题选项 (Topic Options)
@@ -101,6 +105,7 @@ export const topicOptions: DefaultOptionType[] = [
   { value: "word-study", label: "Word Study" },
   { value: "world-history", label: "World History" },
   { value: "writing-strategies", label: "Writing Strategies" },
+  { value: "other", label: "Other" },
 ];
 
 // --- Generate a larger list of questions for pagination ---

@@ -64,7 +64,7 @@ const AssignAssignmentForm: FC = () => {
     manual: true,
     onSuccess: () => {
       message.success("Assignment assigned successfully!");
-      navigate(-1 as any);
+      navigate("/class/view-class");
     },
     onError: () => {
       message.error("Failed to assign assignment.");

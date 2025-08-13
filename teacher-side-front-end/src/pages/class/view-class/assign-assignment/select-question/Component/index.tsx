@@ -1,5 +1,5 @@
 import { CheckOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate, useRequest } from "@umijs/max";
+import { useLocation, useNavigate, useRequest, useOutletContext } from "@umijs/max";
 import { Button, Card, Col, FloatButton, Form, Radio, Row, Space, Spin, Typography, theme } from "antd";
 import type { FC } from "react";
 import React, { useEffect, useRef, useState } from "react";
@@ -34,6 +34,9 @@ const Applications: FC = () => {
   const location = useLocation();
   const { token } = theme.useToken();
 
+  // 2. 使用 useOutletContext 接收父组件传递的 context
+  const { submittedSearch } = useOutletContext<{ submittedSearch: string }>() || {};
+
   const state = (location.state as LocationState) || {};
   const {
     classId,
@@ -52,16 +55,20 @@ const Applications: FC = () => {
     (d?: { list: QuestionDataType[] }) => {
       const currentList = d?.list || [];
       const currentPage = Math.ceil(currentList.length / pageSize) + 1;
-      return queryFakeList({ ...formValues, count: pageSize, page: currentPage, token: "123" });
+      // 3. 将接收到的 submittedSearch 作为请求参数
+      //    假设你的 API 服务能接收一个名为 keyword 的参数
+      return queryFakeList({ ...formValues, keyword: submittedSearch, count: pageSize, page: currentPage, token: "123" });
     },
     {
       loadMore: true,
-      refreshDeps: [formValues],
+      // 4. 将 submittedSearch 添加到依赖项数组，当它变化时会重新触发请求
+      refreshDeps: [formValues, submittedSearch],
       formatResult: (res) => res.data,
       isNoMore: (d) => !d || !d.list || d.list.length < pageSize,
     }
   );
 
+  // ... 其他代码保持不变
   const list = data?.list || [];
   const parentRef = useRef<HTMLDivElement>(null);
   const rowVirtualizer = useVirtualizer({
@@ -196,26 +203,26 @@ const Applications: FC = () => {
       }}
     >
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <Card bordered={false}>
-            <Form
-              form={form}
-              onValuesChange={(_, allValues) => {
-                const filteredValues = Object.fromEntries(
-                  Object.entries(allValues).filter(
-                    ([, value]) => Array.isArray(value) && value.length > 0,
-                  ),
-                );
-                setFormValues(filteredValues);
-              }}
-            >
-              <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                <StandardFormRow title="GRADE" block><FormItem name="grade"><TagSelect expandable>{gradeOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-                <StandardFormRow title="SUBJECT" block><FormItem name="subject"><TagSelect expandable>{subjectOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-                <StandardFormRow title="CATEGORY" block><FormItem name="category"><TagSelect expandable>{categoryOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-                <StandardFormRow title="TOPIC" block><FormItem name="topic"><TagSelect expandable>{topicOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
-              </Space>
-            </Form>
-          </Card>
+        <Card bordered={false}>
+          <Form
+            form={form}
+            onValuesChange={(_, allValues) => {
+              const filteredValues = Object.fromEntries(
+                Object.entries(allValues).filter(
+                  ([, value]) => Array.isArray(value) && value.length > 0,
+                ),
+              );
+              setFormValues(filteredValues);
+            }}
+          >
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <StandardFormRow title="GRADE" block><FormItem name="grade" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{gradeOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="SUBJECT" block><FormItem name="subject" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{subjectOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="CATEGORY" block><FormItem name="category" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{categoryOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+              <StandardFormRow title="TOPIC" block><FormItem name="topic" style={{ marginBottom: 0 }}><TagSelect expandable hideCheckAll={true}>{topicOptions.map(o => <TagSelect.Option value={o.value!} key={o.value}>{o.label}</TagSelect.Option>)}</TagSelect></FormItem></StandardFormRow>
+            </Space>
+          </Form>
+        </Card>
         {listContent}
       </Space>
 
