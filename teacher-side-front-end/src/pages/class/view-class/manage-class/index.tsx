@@ -13,21 +13,21 @@ import useStyles from "./style.style";
 const assignmentColumns: ProColumns<Submission>[] = [
   {
     title: "Student ID",
-    dataIndex: "student_id",
-    key: "student_id",
+    dataIndex: "studentId",
+    key: "studentId",
   },
   {
     title: "Student Name",
-    dataIndex: "student_name",
-    key: "student_name",
+    dataIndex: "studentName",
+    key: "studentName",
     copyable: true,
   },
   {
     title: "Status",
-    dataIndex: "whether_finish",
-    key: "whether_finish",
+    dataIndex: "whetherFinish",
+    key: "whetherFinish",
     render: (_, record) => {
-      if (record.whether_finish === 0) {
+      if (record.whetherFinish === 0) {
         return <Badge status="success" text="Finished" />;
       }
       return <Badge status="processing" text="In Progress" />;
@@ -40,8 +40,8 @@ const assignmentColumns: ProColumns<Submission>[] = [
   },
   {
     title: "Finish Time",
-    dataIndex: "finish_time",
-    key: "finish_time",
+    dataIndex: "finishTime",
+    key: "finishTime",
   },
 ];
 
@@ -123,7 +123,7 @@ const Basic: FC = () => {
         <Spin spinning={assignmentLoadingStatus}>
           {assignmentData?.map((assignment: Assignment, index: number) => (
             <div key={index}>
-              <div className={styles.title}>{assignment.assignment_name}</div>
+              <div className={styles.title}>{assignment.assignmentName}</div>
               <ProTable
                 style={{ marginBottom: 24 }}
                 pagination={false}
