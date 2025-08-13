@@ -29,7 +29,7 @@ export type ListItemDataType = {
   id: string;
   className?: string; // 班级名称
   studentAmount?: number; // 学生数量
-  unreadMessages?: number; // 未读消息数
+  ongoingAssignment?: number; //
   avatar?: string; // 班级图标
   title?: string; // 兼容字段
 };

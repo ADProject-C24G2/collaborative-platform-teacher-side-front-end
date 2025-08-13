@@ -1,15 +1,13 @@
 import { AvatarDropdown, AvatarName, Footer } from "@/components";
-// [注释掉] 我们不再需要从后端获取用户，所以可以注释掉这个导入
-// import { currentUser as queryCurrentUser } from "@/services/ant-design-pro/api";
+import { currentUser as queryCurrentUser } from "@/services/ant-design-pro/api";
 import type { Settings as LayoutSettings } from "@ant-design/pro-components";
-import type { RunTimeLayoutConfig } from "@umijs/max"; // [修改] 删除了不再需要的 RequestConfig
+import type { RequestConfig, RunTimeLayoutConfig } from "@umijs/max";
 import { history } from "@umijs/max";
 import { ConfigProvider, theme } from "antd";
 import type { ThemeConfig } from "antd";
 import React, { useEffect, useState } from "react";
 import defaultSettings from "../config/defaultSettings";
-// [注释掉] 既然不用请求，也就不需要错误处理了
-// import { errorConfig } from "./requestErrorConfig";
+import { errorConfig } from "./requestErrorConfig";
 
 // React 19 补丁
 import "@ant-design/v5-patch-for-react-19";
@@ -19,6 +17,9 @@ type ThemeMode = "light" | "dark";
 
 /**
  * 这是一个独立的 React 组件，专门用于处理主题逻辑
+ * 1. 使用 useState 管理当前是 'light' 还是 'dark'
+ * 2. 使用 useEffect 监听操作系统的颜色模式变化
+ * 3. 使用 antd 的 ConfigProvider 将主题应用到整个应用
  */
 const ThemeWrapper: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -26,28 +27,51 @@ const ThemeWrapper: React.FC<{ children: React.ReactNode }> = ({
   const [themeMode, setThemeMode] = useState<ThemeMode>("light");
 
   useEffect(() => {
+    // 监测系统主题的 API
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    // 根据系统设置，更新我们的主题状态
     const handleThemeChange = (e: MediaQueryListEvent | MediaQueryList) => {
       const newThemeMode = e.matches ? "dark" : "light";
       setThemeMode(newThemeMode);
     };
+
+    // 页面加载时，立即获取一次当前系统主题
     handleThemeChange(mediaQuery);
+
+    // 添加监听器，当系统主题变化时，实时更新
     mediaQuery.addEventListener("change", handleThemeChange);
+
+    // 组件销毁时，移除监听器
     return () => mediaQuery.removeEventListener("change", handleThemeChange);
   }, []);
 
+  // 根据当前主题模式，配置 antd 的 theme
   const antdTheme: ThemeConfig = {
     algorithm:
       themeMode === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
   };
 
+  // 使用 ConfigProvider 包裹应用，使其所有子组件都应用上我们配置的主题
   return <ConfigProvider theme={antdTheme}>{children}</ConfigProvider>;
 };
 
+/**
+ * `rootContainer` 是 Umi 提供的运行时 API
+ * 它允许我们用一个组件包裹整个应用的最外层
+ * 我们在这里使用它，来让 `ThemeWrapper` 生效
+ */
 export function rootContainer(container: React.ReactNode) {
   return <ThemeWrapper>{container}</ThemeWrapper>;
 }
 
+// =======================================================================
+// ========================== END: 新增的主题切换逻辑 =====================
+// =======================================================================
+
+// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 你原来的代码都原封不动地保留在下面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+const isDev = process.env.NODE_ENV === "development";
 const loginPath = "/user/login";
 
 /**
@@ -59,29 +83,6 @@ export async function getInitialState(): Promise<{
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
-  // [新增] 创建一个虚拟的用户信息对象
-  const mockUser: API.CurrentUser = {
-    name: "Admin (本地模拟)",
-    avatar:
-      "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
-    userid: "00000001",
-    email: "ant-design-pro@alipay.com",
-    signature: "海纳百川，有容乃大",
-    title: "交互专家",
-    group: "蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED",
-    // 你可以根据需要添加其他字段
-  };
-
-  // [修改] 直接返回这个虚拟用户信息，不再需要任何网络请求和判断
-  return {
-    currentUser: mockUser,
-    settings: defaultSettings as Partial<LayoutSettings>,
-  };
-
-  /*
-  // =======================================================================
-  // ====================== 以下是您原来的逻辑，已被注释掉 =====================
-  // =======================================================================
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser({
@@ -111,13 +112,12 @@ export async function getInitialState(): Promise<{
     fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
   };
-  */
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({
   initialState,
-  // setInitialState, // [注释掉] 因为是静态数据，不再需要 setInitialState
+  setInitialState,
 }) => {
   return {
     avatarProps: {
@@ -132,14 +132,11 @@ export const layout: RunTimeLayoutConfig = ({
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      // [注释掉] 因为 initialState.currentUser 永远存在，所以这里的登录验证逻辑可以安全地移除了
-      /*
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
-      */
     },
     bgLayoutImgList: [
       {
@@ -179,7 +176,7 @@ export const layout: RunTimeLayoutConfig = ({
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
-// export const request: RequestConfig = {
-//   baseURL: isDev ? "" : "https://proapi.azurewebsites.net",
-//   ...errorConfig,
-// };
+export const request: RequestConfig = {
+  baseURL: isDev ? "" : "https://proapi.azurewebsites.net",
+  ...errorConfig,
+};

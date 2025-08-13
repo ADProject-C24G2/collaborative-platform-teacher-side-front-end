@@ -43,9 +43,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
 
   const { run, loading } = useRequest(fakeSubmitForm, {
     manual: true,
-    onSuccess: () => {
-      message.success("Announcement sent successfully");
-    },
+    onSuccess: () => {},
   });
 
   const onFinish = async (values: Record<string, any>) => {

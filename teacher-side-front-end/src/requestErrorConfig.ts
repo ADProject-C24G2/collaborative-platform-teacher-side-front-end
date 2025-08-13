@@ -103,6 +103,15 @@ export const errorConfig: RequestConfig = {
       if (data?.code === 0) {
         message.error("Request failed!");
       }
+
+      if (data?.code === 2) {
+        message.success("Successfully make announcement!");
+      }
+
+      if (data?.code === 3) {
+        message.error("Sorry, nobody is in the class!");
+      }
+
       return response;
     },
   ],

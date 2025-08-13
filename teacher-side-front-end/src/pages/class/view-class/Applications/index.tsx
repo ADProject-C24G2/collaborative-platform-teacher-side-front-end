@@ -33,16 +33,16 @@ const Applications: React.FC = () => {
   // 卡片底部信息组件
   const CardInfo: React.FC<{
     classSize: React.ReactNode;
-    unreadMessages: React.ReactNode;
-  }> = ({ classSize, unreadMessages }) => (
+    ongoingAssignment: React.ReactNode;
+  }> = ({ classSize, ongoingAssignment }) => (
     <div className={stylesApplications.cardInfo}>
       <div>
         <p>Class Size</p>
         <p>{classSize}</p>
       </div>
       <div>
-        <p>Unread Messages</p>
-        <p>{unreadMessages}</p>
+        <p>Ongoing Assignment</p>
+        <p>{ongoingAssignment}</p>
       </div>
     </div>
   );
@@ -107,23 +107,6 @@ const Applications: React.FC = () => {
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>,
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "1",
-                      label: "View Details",
-                    },
-                    {
-                      key: "2",
-                      label: "Export Student List",
-                    },
-                  ],
-                }}
-                key="more"
-              >
-                <EllipsisOutlined />
-              </Dropdown>,
             ]}
           >
             {/* 卡片头部：班级名称 + 图标 */}
@@ -135,7 +118,7 @@ const Applications: React.FC = () => {
             <div>
               <CardInfo
                 classSize={item.studentAmount ?? 0}
-                unreadMessages={item.unreadMessages ?? 0}
+                ongoingAssignment={item.ongoingAssignment ?? 0}
               />
             </div>
           </Card>

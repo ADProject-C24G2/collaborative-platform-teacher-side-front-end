@@ -1,16 +1,9 @@
 import {
-  AlipayCircleOutlined,
   LockOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
+  MailOutlined, // Changed from UserOutlined
 } from "@ant-design/icons";
-import {
-  LoginForm,
-  ProFormCheckbox,
-  ProFormText,
-} from "@ant-design/pro-components";
-import { FormattedMessage, Helmet, useIntl, useModel } from "@umijs/max";
+import { LoginForm, ProFormText } from "@ant-design/pro-components";
+import { Helmet, useModel } from "@umijs/max";
 import { Alert, App, Tabs } from "antd";
 import { createStyles } from "antd-style";
 import React, { useState } from "react";
@@ -73,7 +66,6 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel("@@initialState");
   const { styles } = useStyles();
   const { message } = App.useApp();
-  const intl = useIntl();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -89,13 +81,10 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      // 登录
+      // Login
       const msg = await login({ ...values, type });
       if (msg.status === "ok") {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: "pages.login.success",
-          defaultMessage: "登录成功！",
-        });
+        const defaultLoginSuccessMessage = "Login successful!";
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
@@ -103,13 +92,10 @@ const Login: React.FC = () => {
         return;
       }
       console.log(msg);
-      // 如果失败去设置用户错误信息
+      // Set user error message if login fails
       setUserLoginState(msg);
     } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: "pages.login.failure",
-        defaultMessage: "登录失败，请重试！",
-      });
+      const defaultLoginFailureMessage = "Login failed, please try again!";
       console.log(error);
       message.error(defaultLoginFailureMessage);
     }
@@ -120,10 +106,7 @@ const Login: React.FC = () => {
     <div className={styles.container}>
       <Helmet>
         <title>
-          {intl.formatMessage({
-            id: "menu.login",
-            defaultMessage: "登录页",
-          })}
+          Login Page
           {Settings.title && ` - ${Settings.title}`}
         </title>
       </Helmet>
@@ -140,9 +123,6 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="Collaborative Practice Platform"
-          initialValues={{
-            autoLogin: true,
-          }}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -154,43 +134,35 @@ const Login: React.FC = () => {
             items={[
               {
                 key: "account",
-                label: intl.formatMessage({
-                  id: "pages.login.accountLogin.tab",
-                  defaultMessage: "账户密码登录",
-                }),
+                label: "Account Login",
               },
             ]}
           />
 
           {status === "error" && loginType === "account" && (
             <LoginMessage
-              content={intl.formatMessage({
-                id: "pages.login.accountLogin.errorMessage",
-                defaultMessage: "账户或密码错误",
-              })}
+              content={
+                "Incorrect email or password. Please note: Only teachers can log in."
+              }
             />
           )}
           {type === "account" && (
             <>
               <ProFormText
-                name="username"
+                name="email" // Changed from username
                 fieldProps={{
                   size: "large",
-                  prefix: <UserOutlined />,
+                  prefix: <MailOutlined />, // Changed icon
                 }}
-                placeholder={intl.formatMessage({
-                  id: "pages.login.username.placeholder",
-                  defaultMessage: "用户名: admin or user",
-                })}
+                placeholder={"Please enter your email (Teachers only)"}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
-                      />
-                    ),
+                    message: "Please enter your email!",
+                  },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email address!",
                   },
                 ]}
               />
@@ -200,19 +172,11 @@ const Login: React.FC = () => {
                   size: "large",
                   prefix: <LockOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: "pages.login.password.placeholder",
-                  defaultMessage: "密码: 123456",
-                })}
+                placeholder={"Please enter your password"}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
-                      />
-                    ),
+                    message: "Please enter your password!",
                   },
                 ]}
               />

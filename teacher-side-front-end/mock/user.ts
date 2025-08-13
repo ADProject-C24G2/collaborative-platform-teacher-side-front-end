@@ -47,7 +47,7 @@ export default {
       data: {
         name: "Serati Ma",
         avatar:
-          "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
+          "https://img.freepik.com/premium-vector/female-teacher-cute-woman-stands-with-pointer-book-school-learning-concept-teacher-s-day_335402-428.jpg",
         userid: "00000001",
         email: "antdesign@alipay.com",
         signature: "海纳百川，有容乃大",
