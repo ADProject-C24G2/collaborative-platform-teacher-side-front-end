@@ -64,7 +64,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
 
   return (
     <PageContainer
-      title={`Make Announcement - Class ${className}`}
+      title={`Make Announcement - ${className}`}
       onBack={() => window.history.back()}
       content="Please fill in the announcement content and select the recipients."
     >

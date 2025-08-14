@@ -137,7 +137,7 @@ const Basic: FC = () => {
   return (
     // Add onBack prop to enable the back button
     <PageContainer
-      title={`Manage Class - Class ${className}`}
+      title={`Manage Class - ${className}`}
       onBack={() => window.history.back()}>
       {" "}
       <Card variant="borderless">

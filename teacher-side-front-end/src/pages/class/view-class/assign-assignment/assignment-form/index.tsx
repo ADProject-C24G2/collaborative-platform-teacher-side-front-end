@@ -135,7 +135,7 @@ const AssignAssignmentForm: FC = () => {
 
   return (
     <PageContainer
-      title={`Create Assignment - Class ${className || "Unknown"}`}
+      title={`Create Assignment - ${className || "Unknown"}`}
       content="Create a new assignment for your class."
       onBack={() => window.history.back()}>
       <Card bordered={false}>
