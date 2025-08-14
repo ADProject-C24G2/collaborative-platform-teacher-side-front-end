@@ -65,12 +65,6 @@ export function rootContainer(container: React.ReactNode) {
   return <ThemeWrapper>{container}</ThemeWrapper>;
 }
 
-// =======================================================================
-// ========================== END: 新增的主题切换逻辑 =====================
-// =======================================================================
-
-// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 你原来的代码都原封不动地保留在下面 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-
 const isDev = process.env.NODE_ENV === "development";
 const loginPath = "/user/login";
 

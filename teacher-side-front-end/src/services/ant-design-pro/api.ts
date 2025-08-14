@@ -13,9 +13,14 @@ export async function currentUser(options?: { [key: string]: any }) {
 }
 
 /** 退出登录接口 POST /api/login/outLogin */
-export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>("/api/login/outLogin", {
+export async function outLogin(
+  options?: { [key: string]: any },
+) {
+  return request<API.LoginResult>("/teacher/class/logout", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     ...(options || {}),
   });
 }
