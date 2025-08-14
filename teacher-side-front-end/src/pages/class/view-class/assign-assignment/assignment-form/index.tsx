@@ -27,6 +27,7 @@ type Question = {
 
 type LocationState = {
   classId?: string;
+  className?: string;
   selectedQuestions?: Question[];
   currentValues?: {
     title: string;
@@ -40,7 +41,7 @@ const AssignAssignmentForm: FC = () => {
   const [form] = Form.useForm();
 
   const state = (location.state as LocationState) || {};
-  const { classId, currentValues } = state;
+  const { classId, className, currentValues } = state;
 
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>(
     state.selectedQuestions || [],
@@ -73,10 +74,7 @@ const AssignAssignmentForm: FC = () => {
     onSuccess: () => {
       // message.success("Assignment assigned successfully!");
       navigate("/class/view-class");
-    },
-    onError: () => {
-      message.error("Failed to assign assignment.");
-    },
+    }
   });
 
   const onFinish = async (values: { title: string; expire_time: any }) => {
@@ -136,7 +134,10 @@ const AssignAssignmentForm: FC = () => {
   };
 
   return (
-    <PageContainer content="Create a new assignment for your class.">
+    <PageContainer
+      title={`Create Assignment - Class ${className || "Unknown"}`}
+      content="Create a new assignment for your class."
+      onBack={() => window.history.back()}>
       <Card bordered={false}>
         <ProForm
           form={form}

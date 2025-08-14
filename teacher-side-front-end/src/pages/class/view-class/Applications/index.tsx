@@ -74,7 +74,7 @@ const Applications: React.FC = () => {
                 <EditOutlined
                   onClick={() => {
                     navigate("/class/manage-class", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -84,7 +84,7 @@ const Applications: React.FC = () => {
                 <PlusOutlined
                   onClick={() => {
                     navigate("/class/assignment-form", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -94,7 +94,7 @@ const Applications: React.FC = () => {
                 <SendOutlined
                   onClick={() => {
                     navigate("/class/make-announcement", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -135,7 +135,6 @@ const Applications: React.FC = () => {
             {/* ✅ 修改部分结束 */}
 
             <Card.Meta
-              avatar={<Avatar size="small" src={item.avatar} />}
               title={item.className || item.title}
             />
             <div>

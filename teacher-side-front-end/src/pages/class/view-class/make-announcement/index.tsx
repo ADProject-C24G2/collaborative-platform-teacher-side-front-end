@@ -16,6 +16,7 @@ import { useRequest, useNavigate } from "@umijs/max";
 const AnnouncementForm: FC<Record<string, any>> = () => {
   interface LocationState {
     classId?: string;
+    className?: string
   }
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
   const location = useLocation();
   const state = location.state as LocationState;
   const classId = state?.classId || "Unknown";
+  const className = state?.className || "Unknown";
 
   // Mock student list (in a real project, this should be fetched from a backend API)
 
@@ -62,7 +64,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
 
   return (
     <PageContainer
-      title={`Make Announcement - Class ${classId}`}
+      title={`Make Announcement - Class ${className}`}
       onBack={() => window.history.back()}
       content="Please fill in the announcement content and select the recipients."
     >

@@ -90,6 +90,7 @@ const Basic: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const classId = (location.state as { classId?: string })?.classId;
+  const className = (location.state as { className?: string })?.className;
   // --- ADDED: State to track which assignment is being deleted for loading indicator ---
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -135,7 +136,9 @@ const Basic: FC = () => {
 
   return (
     // Add onBack prop to enable the back button
-    <PageContainer onBack={() => navigate(-1)}>
+    <PageContainer
+      title={`Manage Class - Class ${className}`}
+      onBack={() => window.history.back()}>
       {" "}
       <Card variant="borderless">
         {/* --- Announcement Module --- */}{" "}
