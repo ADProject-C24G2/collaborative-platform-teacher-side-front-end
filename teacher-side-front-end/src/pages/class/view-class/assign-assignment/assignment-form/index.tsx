@@ -26,7 +26,7 @@ type Question = {
 };
 
 type LocationState = {
-  classId?: string;
+  classId?: string | undefined;
   className?: string;
   selectedQuestions?: Question[];
   currentValues?: {
@@ -42,6 +42,9 @@ const AssignAssignmentForm: FC = () => {
 
   const state = (location.state as LocationState) || {};
   const { classId, className, currentValues } = state;
+  if (classId === undefined){
+    navigate("/class/view-class", {replace: true})
+  }
 
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>(
     state.selectedQuestions || [],
@@ -137,7 +140,7 @@ const AssignAssignmentForm: FC = () => {
     <PageContainer
       title={`Create Assignment - ${className || "Unknown"}`}
       content="Create a new assignment for your class."
-      onBack={() => window.history.back()}>
+      onBack={() =>navigate("/class/view-class")}>
       <Card bordered={false}>
         <ProForm
           form={form}

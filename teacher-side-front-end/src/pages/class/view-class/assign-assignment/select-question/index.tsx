@@ -43,6 +43,7 @@ const Search: FC<SearchProps> = () => {
 
   return (
     <PageContainer
+      title={"Select Questions"}
       content={
         <div style={{ textAlign: "center" }}>
           <Input.Search

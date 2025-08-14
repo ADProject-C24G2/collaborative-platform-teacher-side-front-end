@@ -71,7 +71,7 @@ const Applications: React.FC = () => {
             // Clicking the card now navigates to the manage page for that class.
             onClick={() => {
               navigate("/class/get-student-information", {
-                state: { classId: item.id },
+                state: { classId: item.id, className: item.className },
               });
             }}
             actions={[

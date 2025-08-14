@@ -23,14 +23,12 @@ const useStyles = createStyles(({ token }) => {
       marginRight: '24px',
       color: token.colorTextHeading,
       fontSize: token.fontSize,
+      fontWeight: 'bold',
       textAlign: 'right',
       '& > span': {
         display: 'inline-block',
         height: '32px',
         lineHeight: '32px',
-        '&::after': {
-          content: "'：'",
-        },
       },
     },
     content: {

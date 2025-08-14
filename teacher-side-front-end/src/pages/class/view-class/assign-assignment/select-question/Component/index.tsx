@@ -43,6 +43,9 @@ const Applications: FC = () => {
     currentValues,
     selectedQuestions: initialSelected = [],
   } = state;
+  if (classId === undefined){
+    navigate("/class/view-class", {replace: true})
+  }
 
   const [formValues, setFormValues] = useState<Omit<Params, "count">>({});
   const [revealedAnswers, setRevealedAnswers] = useState<Set<number>>(new Set());

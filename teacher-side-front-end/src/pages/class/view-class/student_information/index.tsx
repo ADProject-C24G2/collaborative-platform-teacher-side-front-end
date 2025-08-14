@@ -3,7 +3,7 @@
 import { getStudents, updateStudentStatus } from "./service";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
-import { useLocation } from "@umijs/max";
+import { useLocation, useNavigate } from "@umijs/max";
 import { Button, message, Popconfirm } from "antd";
 import type { FC } from "react";
 import React, { useRef, useState } from "react";
@@ -11,6 +11,7 @@ import type { Student } from "./data.d";
 
 interface LocationState {
   classId?: number | string;
+  className?: string;
 }
 
 const StudentListPage: FC = () => {
@@ -19,7 +20,12 @@ const StudentListPage: FC = () => {
   const [dataSource, setDataSource] = useState<Student[]>([]);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const classId = (location.state as LocationState)?.classId;
+  const className = (location.state as LocationState)?.className;
+  if (classId == "Unknown"){
+    navigate("/class/view-class", { replace: true })
+  }
 
   // This function correctly removes a student from the list on a successful POST.
   const handleStatusChange = async (studentId: number, newStatus: 0 | 1) => {
@@ -110,7 +116,7 @@ const StudentListPage: FC = () => {
       render: (_, record: Student) => {
         const isNormal = record.status === 1;
         const newStatus = isNormal ? 0 : 1;
-        const buttonText = isNormal ? "Ban Student" : "Unban Student";
+        const buttonText = isNormal ? "Ban" : "Unban";
         const confirmTitle = `Are you sure you want to ${
           isNormal ? "ban" : "unban"
         } this student?`;
@@ -136,14 +142,18 @@ const StudentListPage: FC = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer
+    title={`Student List - ${className || 'Unknown'}`}
+    content="View and manage the students in your class."
+    onBack={() => navigate("/class/view-class")}
+    >
       <ProTable<Student>
         headerTitle="Student Information"
         actionRef={actionRef}
         rowKey="id"
         search={{ labelWidth: "auto" }}
         params={{ classId }}
-        // ✅ FIX: The request function now transforms the API response
+        // FIX: The request function now transforms the API response
         request={async (params) => {
           if (!params.classId) {
             setDataSource([]);

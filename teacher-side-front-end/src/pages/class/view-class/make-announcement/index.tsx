@@ -7,7 +7,7 @@ import {
   ProFormTextArea,
   ProFormDependency,
 } from "@ant-design/pro-components";
-import { Button, Card, message } from "antd";
+import { Card, message } from "antd";
 import type { FC } from "react";
 import { useLocation } from "@umijs/max";
 import { fakeSubmitForm, fetchStudentList } from "../service";
@@ -25,6 +25,9 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
   const state = location.state as LocationState;
   const classId = state?.classId || "Unknown";
   const className = state?.className || "Unknown";
+  if (classId == "Unknown"){
+    navigate("/class/view-class", {replace: true})
+  }
 
   // Mock student list (in a real project, this should be fetched from a backend API)
 
@@ -65,7 +68,7 @@ const AnnouncementForm: FC<Record<string, any>> = () => {
   return (
     <PageContainer
       title={`Make Announcement - ${className}`}
-      onBack={() => window.history.back()}
+      onBack={() => navigate("/class/view-class")}
       content="Please fill in the announcement content and select the recipients."
     >
       <Card variant="borderless">

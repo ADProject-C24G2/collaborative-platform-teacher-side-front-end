@@ -60,7 +60,9 @@ const BasicForm: FC = () => {
   };
 
   return (
-    <PageContainer content="Form pages are used to collect or verify information from users. Basic forms are common in scenarios with fewer data items.">
+    <PageContainer
+      breadcrumb={{}}
+      content="Form pages are used to collect or verify information from users. Basic forms are common in scenarios with fewer data items.">
       <Card>
         <ProForm
           formRef={formRef}
