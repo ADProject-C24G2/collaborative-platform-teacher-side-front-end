@@ -24,5 +24,6 @@ export type Submission = {
 // A single assignment and all its submissions
 export type Assignment = {
   assignmentName: string;
+  assignmentId: string;
   submissions: Submission[];
 };

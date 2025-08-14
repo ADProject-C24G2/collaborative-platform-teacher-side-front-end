@@ -19,3 +19,12 @@ export async function queryAssignmentStatus(params: {
 }> {
   return request("/teacher/class/assignment-status", { params });
 }
+
+export async function deleteAssignment(params: { assignmentId: string }) {
+  // This function sends a POST request to the specified endpoint with the assignmentId.
+  // The backend should be configured to handle this request and delete the corresponding assignment.
+  return request("/teacher/class/delete-assignment", {
+    method: "POST",
+    data: params,
+  });
+}

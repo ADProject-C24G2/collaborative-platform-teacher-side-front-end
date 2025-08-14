@@ -5,7 +5,15 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { useLocation, useNavigate, useRequest } from "@umijs/max";
-import { Button, Card, Form, List, message, Popconfirm, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  List,
+  message,
+  Popconfirm,
+  Typography,
+} from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import type { FC } from "react";
@@ -63,7 +71,7 @@ const AssignAssignmentForm: FC = () => {
   const { run, loading } = useRequest(assignAssignment, {
     manual: true,
     onSuccess: () => {
-      message.success("Assignment assigned successfully!");
+      // message.success("Assignment assigned successfully!");
       navigate("/class/view-class");
     },
     onError: () => {
@@ -71,10 +79,7 @@ const AssignAssignmentForm: FC = () => {
     },
   });
 
-  const onFinish = async (values: {
-    title: string;
-    expire_time: any;
-  }) => {
+  const onFinish = async (values: { title: string; expire_time: any }) => {
     const expireTime = dayjs(values.expire_time);
     const now = dayjs();
 
@@ -125,7 +130,7 @@ const AssignAssignmentForm: FC = () => {
 
   const handleDeleteQuestion = (questionId: string) => {
     setSelectedQuestions((prevQuestions) =>
-      prevQuestions.filter((q) => q.questionId !== questionId)
+      prevQuestions.filter((q) => q.questionId !== questionId),
     );
     message.success("Question removed.");
   };
@@ -167,15 +172,21 @@ const AssignAssignmentForm: FC = () => {
           />
 
           <Form.Item label="Selected Questions">
-            <Button type="primary" onClick={handleSelectQuestions} style={{ marginBottom: 16 }}>
-              {selectedQuestions.length > 0 ? 'Select More / Modify' : 'Select Questions'}
+            <Button
+              type="primary"
+              onClick={handleSelectQuestions}
+              style={{ marginBottom: 16 }}
+            >
+              {selectedQuestions.length > 0
+                ? "Select More / Modify"
+                : "Select Questions"}
             </Button>
 
             <List
               bordered
               itemLayout="horizontal"
               dataSource={selectedQuestions}
-              locale={{ emptyText: 'No questions have been selected yet.' }}
+              locale={{ emptyText: "No questions have been selected yet." }}
               renderItem={(item) => (
                 <List.Item
                   actions={[
@@ -186,14 +197,14 @@ const AssignAssignmentForm: FC = () => {
                       cancelText="No"
                     >
                       <Button type="link" danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
+                    </Popconfirm>,
                   ]}
                 >
                   <List.Item.Meta
                     title={`ID: ${item.questionId}`}
                     description={
                       <Typography.Paragraph
-                        ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
+                        ellipsis={{ rows: 2, expandable: true, symbol: "more" }}
                         style={{ margin: 0 }}
                       >
                         {item.question_content}

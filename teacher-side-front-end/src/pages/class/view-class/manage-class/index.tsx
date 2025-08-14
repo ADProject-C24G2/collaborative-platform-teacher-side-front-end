@@ -1,12 +1,28 @@
 import type { ProColumns } from "@ant-design/pro-components";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { useLocation, useNavigate, useRequest } from "@umijs/max";
-import { Badge, Card, Descriptions, Divider, Spin } from "antd";
+// --- MODIFIED: Added imports for Button, Popconfirm, and message ---
+import {
+  Badge,
+  Button,
+  Card,
+  Descriptions,
+  Divider,
+  message,
+  Popconfirm,
+  Spin,
+} from "antd";
 import type { FC } from "react";
-import React from "react";
+// --- MODIFIED: Added useState import ---
+import React, { useState } from "react";
 // Import updated types and services
 import type { Announcement, Assignment, Submission } from "./data.d";
-import { queryAnnouncementList, queryAssignmentStatus } from "./service";
+// --- MODIFIED: Imported the new deleteAssignment service ---
+import {
+  deleteAssignment,
+  queryAnnouncementList,
+  queryAssignmentStatus,
+} from "./service";
 import useStyles from "./style.style";
 
 //time set
@@ -51,7 +67,7 @@ const assignmentColumns: ProColumns<Submission>[] = [
     dataIndex: "whetherFinish",
     key: "whetherFinish",
     render: (_, record) => {
-      if (record.whetherFinish === 0) {
+      if (record.whetherFinish === 1) {
         return <Badge status="success" text="Finished" />;
       }
       return <Badge status="processing" text="In Progress" />;
@@ -74,6 +90,8 @@ const Basic: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const classId = (location.state as { classId?: string })?.classId;
+  // --- ADDED: State to track which assignment is being deleted for loading indicator ---
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Fetch announcement data, passing classId
   const { data: announcementData, loading: announcementLoading } = useRequest(
@@ -84,24 +102,46 @@ const Basic: FC = () => {
     },
   );
 
-  // Fetch assignment status data, passing classId
-  const { data: assignmentData, loading: assignmentLoadingStatus } = useRequest(
-    () => queryAssignmentStatus({ classId }),
-    {
-      refreshDeps: [classId], // Refetch when classId changes
-      formatResult: (res) => res?.data,
+  // --- MODIFIED: Destructured 'refresh' to refetch data after deletion ---
+  const {
+    data: assignmentData,
+    loading: assignmentLoadingStatus,
+    refresh: refreshAssignmentStatus,
+  } = useRequest(() => queryAssignmentStatus({ classId }), {
+    refreshDeps: [classId], // Refetch when classId changes
+    formatResult: (res) => res?.data,
+  });
+
+  // --- ADDED: Umi hook to handle the delete mutation ---
+  const { run: runDeleteAssignment } = useRequest(deleteAssignment, {
+    manual: true, // We will trigger this request manually
+    onSuccess: () => {
+      message.success("Assignment deleted successfully.");
+      refreshAssignmentStatus(); // Refetch the assignment list
+      setDeletingId(null); // Clear the deleting ID
     },
-  );
+    onError: (error) => {
+      message.error("Failed to delete assignment.");
+      console.error("Deletion error:", error);
+      setDeletingId(null); // Clear the deleting ID on error
+    },
+  });
+
+  // --- ADDED: Handler function for the delete action ---
+  const handleDelete = (assignmentId: string) => {
+    setDeletingId(assignmentId); // Set the ID of the assignment being deleted
+    runDeleteAssignment({ assignmentId });
+  };
 
   return (
     // Add onBack prop to enable the back button
     <PageContainer onBack={() => navigate(-1)}>
-           {" "}
+      {" "}
       <Card variant="borderless">
-        {/* --- Announcement Module --- */}       {" "}
-        <div className={styles.title}>Announcements</div>       {" "}
+        {/* --- Announcement Module --- */}{" "}
+        <div className={styles.title}>Announcements</div>{" "}
         <Spin spinning={announcementLoading}>
-                   {" "}
+          {" "}
           {announcementData?.map((item: Announcement, index: number) => (
             <Card
               key={index}
@@ -110,22 +150,20 @@ const Basic: FC = () => {
               style={{ marginBottom: 24 }}
               extra={`Sent Time: ${formatTimeArray(item.createTime)}`}
             >
-                           {" "}
+              {" "}
               <Descriptions column={1}>
-                               {" "}
+                {" "}
                 <Descriptions.Item
                   label="Recipients"
                   contentStyle={{ wordBreak: "break-word" }}
                 >
-                                   {" "}
+                  {" "}
                   {item.recipientType === "specific"
                     ? item.students
                         ?.map((student) => student.studentName)
                         .join(", ")
-                    : "All"}
-                                 {" "}
-                </Descriptions.Item>
-                               {" "}
+                    : "All"}{" "}
+                </Descriptions.Item>{" "}
                 <Descriptions.Item
                   label="Content"
                   contentStyle={{
@@ -134,20 +172,45 @@ const Basic: FC = () => {
                   }}
                 >
                   {item.content}
-                </Descriptions.Item>
-                             {" "}
-              </Descriptions>
-                         {" "}
+                </Descriptions.Item>{" "}
+              </Descriptions>{" "}
             </Card>
-          ))}
-                 {" "}
+          ))}{" "}
         </Spin>
         {/* --- Assignment Status Module --- */}
         <Divider style={{ marginBottom: 32 }} />
         <Spin spinning={assignmentLoadingStatus}>
           {assignmentData?.map((assignment: Assignment, index: number) => (
             <div key={index}>
-              <div className={styles.title}>{assignment.assignmentName}</div>
+              {/* --- MODIFIED: Title and delete button container --- */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "16px",
+                }}
+              >
+                <div className={styles.title} style={{ marginBottom: 0 }}>
+                  {assignment.assignmentName}
+                </div>
+                {/* --- ADDED: Popconfirm wrapper for the delete button --- */}
+                <Popconfirm
+                  title="Delete Assignment"
+                  description="Are you sure you want to delete this assignment?"
+                  onConfirm={() => handleDelete(assignment.assignmentId)} // Assumes 'assignmentId' exists
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button
+                    type="primary"
+                    danger
+                    loading={deletingId === assignment.assignmentId} // Shows loading spinner on the correct button
+                  >
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </div>
               <ProTable
                 style={{ marginBottom: 24 }}
                 pagination={false}
@@ -160,10 +223,8 @@ const Basic: FC = () => {
               />
             </div>
           ))}
-        </Spin>
-             {" "}
-      </Card>
-         {" "}
+        </Spin>{" "}
+      </Card>{" "}
     </PageContainer>
   );
 };

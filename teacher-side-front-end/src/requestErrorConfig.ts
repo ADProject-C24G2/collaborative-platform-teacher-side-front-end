@@ -104,10 +104,14 @@ export const errorConfig: RequestConfig = {
         message.success("Successfully make announcement!");
       }
 
+      if (data?.code === 6) {
+        message.success("Successfully make Assignmnet!");
+      }
+
       if (data?.code === 3) {
         message.error("Sorry, nobody is in the class!");
         const error: any = new Error("Silent error");
-        error.name = 'BizError';
+        error.name = "BizError";
         error.info = {
           ...data,
           showType: 0,
