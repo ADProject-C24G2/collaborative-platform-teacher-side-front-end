@@ -53,72 +53,44 @@ const StudentListPage: FC = () => {
   };
 
   const columns: ProColumns<Student>[] = [
-    // ... your column definitions remain unchanged ...
-    {
-      title: "Student ID",
-      dataIndex: "id",
-      key: "id",
-      width: 100,
-      search: false,
-    },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       copyable: true,
+      align: 'center', // Center align
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       copyable: true,
-    },
-    {
-      title: "Password",
-      dataIndex: "password",
-      key: "password",
-      search: false,
-      render: () => "******",
+      align: 'center', // Center align
     },
     {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
       copyable: true,
+      align: 'center', // Center align
     },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      search: false,
-      ellipsis: true,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 120,
-      filters: [
-        { text: "Normal", value: 1 },
-        { text: "Banned", value: 0 },
-      ],
-      onFilter: true,
-      valueEnum: {
-        1: { text: "Normal", status: "Success" },
-        0: { text: "Banned", status: "Error" },
-      },
+      ellipsis: true
     },
     {
       title: "Action",
       key: "action",
       valueType: "option",
-      width: 150,
+      align: 'center', // Center align the action buttons
       render: (_, record: Student) => {
         const isNormal = record.status === 1;
         const newStatus = isNormal ? 0 : 1;
-        const buttonText = isNormal ? "Ban" : "Unban";
+        const buttonText = isNormal ? "Delete" : "Restore";
         const confirmTitle = `Are you sure you want to ${
-          isNormal ? "ban" : "unban"
+          isNormal ? "delete" : "restore"
         } this student?`;
 
         return (
@@ -151,7 +123,7 @@ const StudentListPage: FC = () => {
         headerTitle="Student Information"
         actionRef={actionRef}
         rowKey="id"
-        search={{ labelWidth: "auto" }}
+        search={ false }
         params={{ classId }}
         // FIX: The request function now transforms the API response
         request={async (params) => {
