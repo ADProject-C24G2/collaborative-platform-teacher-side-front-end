@@ -1,17 +1,15 @@
 import {
   CopyOutlined,
   EditOutlined,
-  EllipsisOutlined,
   PlusOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { useRequest } from "@umijs/max";
-import { Avatar, Card, Dropdown, List, Tooltip, message } from "antd";
+import { useRequest, useNavigate } from "@umijs/max";
+import { Avatar, Card, List, Tooltip, message } from "antd";
 import React from "react";
 import type { ListItemDataType } from "../data.d";
 import { queryFakeList } from "../service";
 import useStyles from "./index.style";
-import { useNavigate } from "@umijs/max";
 
 export function formatWan(val: number) {
   const v = val;
@@ -69,10 +67,18 @@ const Applications: React.FC = () => {
                 position: "relative",
               },
             }}
+            // ✅ ADDED NAVIGATION HERE
+            // Clicking the card now navigates to the manage page for that class.
+            onClick={() => {
+              navigate("/class/get-student-information", {
+                state: { classId: item.id },
+              });
+            }}
             actions={[
               <Tooltip key="manage" title="Manage Class">
                 <EditOutlined
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/manage-class", {
                       state: { classId: item.id },
                     });
@@ -82,7 +88,8 @@ const Applications: React.FC = () => {
               </Tooltip>,
               <Tooltip key="homework" title="Assign Assignment">
                 <PlusOutlined
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/assignment-form", {
                       state: { classId: item.id },
                     });
@@ -92,7 +99,8 @@ const Applications: React.FC = () => {
               </Tooltip>,
               <Tooltip key="announcement" title="Make Announcement">
                 <SendOutlined
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/make-announcement", {
                       state: { classId: item.id },
                     });
@@ -102,7 +110,6 @@ const Applications: React.FC = () => {
               </Tooltip>,
             ]}
           >
-            {/* ✅ 修改部分开始 */}
             {item.token && (
               <div
                 style={{
@@ -110,21 +117,19 @@ const Applications: React.FC = () => {
                   top: 16,
                   right: 16,
                   zIndex: 1,
-                  // 使用 flex 布局对齐文字和图标
                   display: "flex",
                   alignItems: "center",
-                  gap: "6px", // 控制文字和图标的间距
-                  color: "rgba(0, 0, 0, 0.45)", // 统一设置颜色
-                  fontSize: "14px", // 统一设置字体大小
+                  gap: "6px",
+                  color: "rgba(0, 0, 0, 0.45)",
+                  fontSize: "14px",
                 }}
               >
-                {/* 添加 'token' 文字提示 */}
                 <span>token</span>
                 <Tooltip title="Copy Class Token">
                   <CopyOutlined
                     style={{ cursor: "pointer", fontSize: "16px" }}
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // Prevent card's onClick from firing
                       navigator.clipboard.writeText(item.token);
                       message.success("Token copied!");
                     }}
@@ -132,7 +137,6 @@ const Applications: React.FC = () => {
                 </Tooltip>
               </div>
             )}
-            {/* ✅ 修改部分结束 */}
 
             <Card.Meta
               avatar={<Avatar size="small" src={item.avatar} />}

@@ -67,6 +67,10 @@ export default [
           },
         ],
       },
+      {
+        path: "get-student-information",
+        component: "./class/view-class/student_information",
+      },
     ],
   }, // ✅ 这里必须加逗号，因为后面还有元素
 ];
