@@ -80,7 +80,7 @@ const Applications: React.FC = () => {
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/manage-class", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -91,7 +91,7 @@ const Applications: React.FC = () => {
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/assignment-form", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -102,7 +102,7 @@ const Applications: React.FC = () => {
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent card's onClick from firing
                     navigate("/class/make-announcement", {
-                      state: { classId: item.id },
+                      state: { classId: item.id, className: item.className },
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -139,7 +139,6 @@ const Applications: React.FC = () => {
             )}
 
             <Card.Meta
-              avatar={<Avatar size="small" src={item.avatar} />}
               title={item.className || item.title}
             />
             <div>
