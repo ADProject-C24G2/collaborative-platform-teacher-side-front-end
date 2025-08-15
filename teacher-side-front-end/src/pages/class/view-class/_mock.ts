@@ -43,7 +43,8 @@ function fakeList(count: number): ListItemDataType[] {
       studentAmount: Math.floor(Math.random() * 50) + 10, // 10-60 人
       unreadMessages: Math.floor(Math.random() * 10), // 0-9 条
       avatar: courseAvatars[i % courseAvatars.length],
-      title: "", // 兼容
+      title: "",
+      token: `token-${i}`,
     });
   }
   return list;
