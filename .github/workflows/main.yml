@@ -21,13 +21,11 @@ jobs:
           node-version: '20'
 
       - name: Build Vercel Project
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         working-directory: ./teacher-side-front-end
         run: |
           yarn global add vercel@latest
-          vercel pull --yes --environment=production
-          vercel build --prod
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Package build artifacts
         run: |
