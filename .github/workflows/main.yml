@@ -1,4 +1,3 @@
-# 工作流名称
 name: Build and Create Release Artifact
 
 on:
@@ -21,8 +20,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: 'teacher-side-front-end/yarn.lock'
 
       - name: Install Dependencies
         working-directory: ./teacher-side-front-end
