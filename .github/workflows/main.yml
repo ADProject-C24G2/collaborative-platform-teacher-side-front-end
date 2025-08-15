@@ -23,7 +23,7 @@ jobs:
       - name: Build Vercel Project
         working-directory: ./teacher-side-front-end
         run: |
-          yarn global add vercel@latest
+          npm install --global vercel@latest
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
