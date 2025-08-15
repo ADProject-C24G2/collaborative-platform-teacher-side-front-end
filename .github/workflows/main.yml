@@ -1,0 +1,55 @@
+# 工作流名称
+name: Build Vercel Project and Create Latest Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Vercel Project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./teacher-side-front-end
+        run: |
+          yarn global add vercel@latest
+          vercel pull --yes --environment=production
+          vercel build --prod
+
+      - name: Package build artifacts
+        run: |
+          zip -r -j vercel-build.zip ./teacher-side-front-end/.vercel/output/*
+
+      - name: Force-update the 'latest' tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git tag -d latest || true
+          git push origin --delete latest || true
+          
+          git tag latest
+          git push origin latest
+
+      - name: Create or Update GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLASSIC_TOKEN }}
+        run: |
+          gh release create latest \
+            --title "Latest Build" \
+            --notes "Automatic build from commit ${{ github.sha }}" \
+            --prerelease \
+            vercel-build.zip --clobber
