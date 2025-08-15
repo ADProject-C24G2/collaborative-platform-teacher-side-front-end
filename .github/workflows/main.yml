@@ -51,4 +51,4 @@ jobs:
             --title "Latest Build Artifact" \
             --notes "Automatic build artifact from commit ${{ github.sha }}. For testing/Nginx deployment." \
             --prerelease \
-            frontend-build.zip --clobber
+            frontend-build.zip
