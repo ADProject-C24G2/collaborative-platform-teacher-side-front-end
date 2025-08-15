@@ -23,9 +23,9 @@ jobs:
       - name: Build Vercel Project
         working-directory: ./teacher-side-front-end
         run: |
-          npm install --global vercel@latest
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          yarn install --frozen-lockfile
+          npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Package build artifacts
         run: |
