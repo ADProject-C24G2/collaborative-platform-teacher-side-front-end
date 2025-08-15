@@ -1,11 +1,13 @@
 # 工作流名称
-name: Build Vercel Project and Create Latest Release
+name: Build and Create Release Artifact
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build-and-release:
+  build-and-create-artifact:
     runs-on: ubuntu-latest
     
     permissions:
@@ -19,35 +21,37 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: 'teacher-side-front-end/yarn.lock'
 
-      - name: Build Vercel Project
+      - name: Install Dependencies
         working-directory: ./teacher-side-front-end
-        run: |
-          yarn install --frozen-lockfile
-          npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: yarn install --frozen-lockfile
+
+      - name: Build Project
+        working-directory: ./teacher-side-front-end
+        run: npm run build
 
       - name: Package build artifacts
         run: |
-          zip -r -j vercel-build.zip ./teacher-side-front-end/.vercel/output/*
+          cd ./teacher-side-front-end/dist
+          zip -r ../../frontend-build.zip .
 
       - name: Force-update the 'latest' tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
           git tag -d latest || true
           git push origin --delete latest || true
-          
           git tag latest
           git push origin latest
 
       - name: Create or Update GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.CLASSIC_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create latest \
-            --title "Latest Build" \
-            --notes "Automatic build from commit ${{ github.sha }}" \
+            --title "Latest Build Artifact" \
+            --notes "Automatic build artifact from commit ${{ github.sha }}. For testing/Nginx deployment." \
             --prerelease \
-            vercel-build.zip --clobber
+            frontend-build.zip --clobber
